@@ -1,0 +1,37 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:AvaloniaInterop.Test.ViewModels"
+             xmlns:views1="clr-namespace:AvaloniaInterop.Test.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaInterop.Test.MainView"
+             x:CompileBindings="True"
+             x:DataType="viewModels:MainViewModel"
+             >
+    <Grid RowDefinitions="Auto,*" >
+
+        <Menu Grid.Row="0">
+            <MenuItem Header="_Tabs">
+                <MenuItem Header="_Add"  Command="{Binding Add}" />
+                <MenuItem Header="_Close" Command="{Binding Close}" />
+            </MenuItem>
+        </Menu>
+
+        <TabControl Name="TabControl" ItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab}" Grid.Row="1" >
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="{Binding Caption}"></TextBlock>
+                        <Button FontSize="10" Command="{Binding Close}">X</Button>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <views1:ViewLocator />
+            </TabControl.ContentTemplate>
+        </TabControl>
+
+    </Grid>
+
+</UserControl>

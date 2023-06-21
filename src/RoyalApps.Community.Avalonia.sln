@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoyalApps.Community.Avalonia.Common", "RoyalApps.Community.Avalonia.Common\RoyalApps.Community.Avalonia.Common.csproj", "{785B7C0E-76F1-490E-92C1-D49D73865A27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoyalApps.Community.Avalonia.Windows", "RoyalApps.Community.Avalonia.Windows\RoyalApps.Community.Avalonia.Windows.csproj", "{41E5DE98-FBB8-401E-849E-C4E99D31AFB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InteropDemo", "InteropDemo", "{554C9939-BB72-4B27-AB7B-C18758071539}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteropDemo", "RoyalApps.Community.Avalonia.InteropDemo\InteropDemo\InteropDemo.csproj", "{675038DC-5E38-4F2E-9EE7-2FD0D8E45EF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteropDemo.WinForms", "RoyalApps.Community.Avalonia.InteropDemo\InteropDemo.WinForms\InteropDemo.WinForms.csproj", "{F5BD743E-4CF9-4025-BF0F-0C316C026A89}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{785B7C0E-76F1-490E-92C1-D49D73865A27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{785B7C0E-76F1-490E-92C1-D49D73865A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{785B7C0E-76F1-490E-92C1-D49D73865A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{785B7C0E-76F1-490E-92C1-D49D73865A27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41E5DE98-FBB8-401E-849E-C4E99D31AFB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41E5DE98-FBB8-401E-849E-C4E99D31AFB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41E5DE98-FBB8-401E-849E-C4E99D31AFB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41E5DE98-FBB8-401E-849E-C4E99D31AFB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{675038DC-5E38-4F2E-9EE7-2FD0D8E45EF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{675038DC-5E38-4F2E-9EE7-2FD0D8E45EF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{675038DC-5E38-4F2E-9EE7-2FD0D8E45EF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{675038DC-5E38-4F2E-9EE7-2FD0D8E45EF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5BD743E-4CF9-4025-BF0F-0C316C026A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5BD743E-4CF9-4025-BF0F-0C316C026A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5BD743E-4CF9-4025-BF0F-0C316C026A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5BD743E-4CF9-4025-BF0F-0C316C026A89}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{675038DC-5E38-4F2E-9EE7-2FD0D8E45EF7} = {554C9939-BB72-4B27-AB7B-C18758071539}
+		{F5BD743E-4CF9-4025-BF0F-0C316C026A89} = {554C9939-BB72-4B27-AB7B-C18758071539}
+	EndGlobalSection
+EndGlobal
