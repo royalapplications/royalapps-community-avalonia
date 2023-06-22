@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -7,9 +9,8 @@ namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 
 internal class WinFormsLifetimeManager
 {
-    private static WinFormsLifetimeManager? _instance;
-    public static WinFormsLifetimeManager Instance => _instance ??= new WinFormsLifetimeManager();
-
+    private static readonly Lazy<WinFormsLifetimeManager> _instance = new (() => new WinFormsLifetimeManager(), LazyThreadSafetyMode.ExecutionAndPublication);
+    public static WinFormsLifetimeManager Instance => _instance.Value;
     private readonly Dictionary<IDisposeWinFormsControl, Control> _controls = new();
 
     private WinFormsLifetimeManager() { }
