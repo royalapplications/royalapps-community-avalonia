@@ -92,6 +92,13 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
 
+    # Upload packages
+    - name: Upload managed components
+      uses: actions/upload-artifact@v3
+      with:
+        name: Avalonia-nupkg
+        path: package/*.nupkg
+
     # Push nuget package to nuget.org
     - name: nuget push
       run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
