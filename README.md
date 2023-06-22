@@ -1,4 +1,4 @@
-# AvaloniaUI Library for Windows 
+# Utilities and Helpers for AvaloniaUI 
 
 [![NuGet Version](https://img.shields.io/nuget/v/RoyalApps.Community.Avalonia.Windows.svg?style=flat)](https://www.nuget.org/packages/RoyalApps.Community.Avalonia.Windows)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/RoyalApps.Community.Avalonia.Windows.svg?color=green)](https://www.nuget.org/packages/RoyalApps.Community.Avalonia.Windows)
@@ -26,7 +26,7 @@ or via the command line interface:
 dotnet add package RoyalApps.Community.Avalonia.Windows
 ```
 
-### Using the WinFormsNativeHost control
+### Using the WinFormsNativeHost Control
 
 #### Add the Control
 
