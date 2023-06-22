@@ -97,7 +97,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Avalonia-nupkg
-        path: package/*.nupkg
+        path: ./*.nupkg
 
     # Push nuget package to nuget.org
     - name: nuget push
