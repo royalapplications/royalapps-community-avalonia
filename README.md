@@ -12,7 +12,7 @@ This package contains a WinFormsControlHost with a custom lifecycle management. 
 
 Putting a NativeControlHost in such a view can cause issues because every time the view gets detached and another one attached, the native control is destroyed and recreated. If you want to host legacy WinForms controls, for example, you might want to have more control over the lifetime of your user control.
 
-![InteropDemo](https://github.com/royalapplications/royalapps-community-avalonia/assets/6168777/fcda0773-2423-4e48-a77c-d3d28dd7fed9)
+![InteropDemo](https://raw.githubusercontent.com/royalapplications/royalapps-community-avalonia/main/docs/assets/InteropDemo.gif)
 
 The demo application as shown above, creates a view with a WinFormsControlHost for each tab. The WinForms control (also part of the demo app), simply contains a text box, prints an "instance id" and has a random background color to demonstrate that the instances "survive" and keep the state until manually disposed.
 
