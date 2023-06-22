@@ -1,8 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using AvaloniaInterop.Test.ViewModels;
 
-namespace AvaloniaInterop.Test;
+namespace InteropDemo;
 
 public partial class MainView : UserControl
 {

@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <RootNamespace>AvaloniaInterop.Test</RootNamespace>
+    <RootNamespace>InteropDemo</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />

@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace AvaloniaInterop.Test;
+namespace InteropDemo;
 
 public partial class MainWindow : Window
 {

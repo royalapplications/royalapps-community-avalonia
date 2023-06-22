@@ -1,13 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0-windows</TargetFramework>
-        <UseWindowsForms>true</UseWindowsForms>
-        <LangVersion>latest</LangVersion>
+        <Product>RoyalApps.Community.Avalonia.Windows</Product>
+        <Description>Provides classes for AvaloniaUI on Windows.</Description>
+        <Company>Royal Apps GmbH</Company>
+        <Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)), Royal Apps GmbH, Austria</Copyright>
+        <PackageProjectUrl>https://github.com/royalapplications/royalapps-community-avalonia-windows</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/royalapplications/royalapps-community-avalonia-windows</RepositoryUrl>
+        <PackageIconUrl>https://github.com/royalapplications/royalapps-community-avalonia-windows/blob/main/docs/assets/RoyalApps_1024.png</PackageIconUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>RoyalApps_1024.png</PackageIcon>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RootNamespace>RoyalApps.Community.Avalonia.Windows</RootNamespace>
-        <Nullable>enable</Nullable>
+        <Version>1.0.0</Version>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU;x64;ARM64</Platforms>
+        <UseWindowsForms>true</UseWindowsForms>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
         <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.2-beta">

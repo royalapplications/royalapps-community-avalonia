@@ -1,8 +1,7 @@
-﻿using Avalonia;
-using System;
-using AvaloniaInterop.Test;
+﻿using System;
+using Avalonia;
 
-namespace Test;
+namespace InteropDemo;
 
 class Program
 {

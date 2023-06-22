@@ -2,14 +2,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Test"
-        xmlns:test="clr-namespace:Test"
-        xmlns:test1="clr-namespace:AvaloniaInterop.Test"
+        xmlns:interopDemo="clr-namespace:InteropDemo"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
-        x:Class="AvaloniaInterop.Test.MainWindow"
+        x:Class="InteropDemo.MainWindow"
         TransparencyLevelHint="AcrylicBlur"
-        Title="Test"
+        Title="Interop Demo"
         ExtendClientAreaToDecorationsHint="False"
         ExtendClientAreaChromeHints="PreferSystemChrome">
         <Panel>
@@ -24,7 +22,7 @@
                 </ExperimentalAcrylicBorder>
                 <Panel Margin="{Binding #MainWindowView.OffScreenMargin}">
                         <Panel Margin="{Binding #MainWindowView.WindowDecorationMargin}">
-                                <test1:MainView />
+                                <interopDemo:MainView />
                         </Panel>
                 </Panel>
         </Panel>

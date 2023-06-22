@@ -2,26 +2,28 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaInterop.Test.ViewModels;
+namespace InteropDemo.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private int _counter = 1;
     [ObservableProperty] private TabViewModel? _selectedTab;
     public ObservableCollection<TabViewModel> Tabs { get; set; } = new();
-    [RelayCommand] public void Add() => AddAndSelectTab(new TestViewModel());
-    [RelayCommand] public void Close() => CloseAndSelectPreviousTab(SelectedTab);
+    [RelayCommand] public void Add() => AddTab(new TestViewModel());
+    [RelayCommand] public void Remove() => RemoveTab(SelectedTab);
 
-    private void AddAndSelectTab(TabViewModel tab)
+    private void AddTab(TabViewModel tab)
     {
+        tab.Caption += $" {_counter++}";
         Tabs.Add(tab);
         SelectedTab = tab;
     }
 
-    public void CloseAndSelectPreviousTab(TabViewModel? tab)
+    public void RemoveTab(TabViewModel? tab)
     {
         if (tab is null)
             return;
-        
+
         tab.RaiseTabClosing();
         Tabs.Remove(tab);
     }

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace AvaloniaInterop.Test.Views;
+namespace InteropDemo.Views;
 
 public partial class TestView : UserControl
 {

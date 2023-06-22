@@ -5,6 +5,7 @@
              xmlns:winForms="clr-namespace:InteropDemo.WinForms;assembly=InteropDemo.WinForms"
              xmlns:nativeControls="clr-namespace:RoyalApps.Community.Avalonia.Windows.NativeControls;assembly=RoyalApps.Community.Avalonia.Windows"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaInterop.Test.Views.TestView">
-    <nativeControls:ManagedNativeControlHost x:TypeArguments="winForms:TestControl" />
+             x:Class="InteropDemo.Views.TestView"
+             Padding="10">
+    <nativeControls:WinFormsControlHost x:Name="WinFormsControlHost" x:TypeArguments="winForms:TestControl" />
 </UserControl>

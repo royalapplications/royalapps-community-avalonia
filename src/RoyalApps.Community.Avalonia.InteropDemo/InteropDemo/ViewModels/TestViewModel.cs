@@ -1,4 +1,4 @@
-﻿namespace AvaloniaInterop.Test.ViewModels;
+﻿namespace InteropDemo.ViewModels;
 
 public class TestViewModel : TabViewModel
 {

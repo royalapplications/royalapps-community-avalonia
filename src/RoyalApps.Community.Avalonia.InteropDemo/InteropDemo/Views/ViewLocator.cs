@@ -1,9 +1,9 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using AvaloniaInterop.Test.ViewModels;
+using InteropDemo.ViewModels;
 
-namespace AvaloniaInterop.Test.Views;
+namespace InteropDemo.Views;
 
 public class ViewLocator : IDataTemplate
 {
@@ -16,7 +16,6 @@ public class ViewLocator : IDataTemplate
             return new TextBlock {Text = "Not Found: " + name};
         
         var view = (Control)Activator.CreateInstance(type)!; // Create View
-        view.DataContext = data; // Set ViewModel as DataContext
         return view;
     }
 

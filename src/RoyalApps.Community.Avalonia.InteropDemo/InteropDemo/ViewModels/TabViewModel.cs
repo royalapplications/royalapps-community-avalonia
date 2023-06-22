@@ -3,18 +3,18 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RoyalApps.Community.Avalonia.Windows.NativeControls;
 
-namespace AvaloniaInterop.Test.ViewModels;
+namespace InteropDemo.ViewModels;
 
-public partial class TabViewModel : ViewModelBase, IDisposeNativeControl
+public partial class TabViewModel : ViewModelBase, IDisposeWinFormsControl
 {
     [ObservableProperty] private string _caption = "n/a";
 
-    public event EventHandler<NativeControlEventArgs>? DisposeNativeControl;
+    public event EventHandler<WinFormsDisposeEventArgs>? DisposeWinFormsControl;
 
-    [RelayCommand] public void Close() => App.MainViewModel.CloseAndSelectPreviousTab(this);
+    [RelayCommand] public void Close() => App.MainViewModel.RemoveTab(this);
 
     public void RaiseTabClosing()
     {
-        DisposeNativeControl?.Invoke(this, new NativeControlEventArgs(this));
+        DisposeWinFormsControl?.Invoke(this, new WinFormsDisposeEventArgs(this));
     }
 }

@@ -1,9 +1,9 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using AvaloniaInterop.Test.ViewModels;
+using InteropDemo.ViewModels;
 
-namespace AvaloniaInterop.Test;
+namespace InteropDemo;
 
 public class App : Application
 {

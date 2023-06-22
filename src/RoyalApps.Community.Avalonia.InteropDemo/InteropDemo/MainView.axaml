@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModels="clr-namespace:AvaloniaInterop.Test.ViewModels"
-             xmlns:views1="clr-namespace:AvaloniaInterop.Test.Views"
+             xmlns:viewModels="clr-namespace:InteropDemo.ViewModels"
+             xmlns:views="clr-namespace:InteropDemo.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaInterop.Test.MainView"
+             x:Class="InteropDemo.MainView"
              x:CompileBindings="True"
              x:DataType="viewModels:MainViewModel"
              >
@@ -14,7 +14,7 @@
         <Menu Grid.Row="0">
             <MenuItem Header="_Tabs">
                 <MenuItem Header="_Add"  Command="{Binding Add}" />
-                <MenuItem Header="_Close" Command="{Binding Close}" />
+                <MenuItem Header="_Close" Command="{Binding Remove}" />
             </MenuItem>
         </Menu>
 
@@ -28,7 +28,7 @@
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
-                <views1:ViewLocator />
+                <views:ViewLocator />
             </TabControl.ContentTemplate>
         </TabControl>
 
