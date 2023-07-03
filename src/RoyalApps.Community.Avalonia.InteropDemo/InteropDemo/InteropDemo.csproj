@@ -1,8 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
-    <RuntimeIdentifier>win10-arm64</RuntimeIdentifier>
+    <RuntimeIdentifiers>win10-x64;win10-arm64</RuntimeIdentifiers>
+    <Platforms>x64;ARM64</Platforms>
+    <Configurations>Debug;Release</Configurations>
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
@@ -21,14 +24,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia" Version="11.0.0-rc2.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc2.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-rc2.2" />
     
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-rc1.1" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-rc2.2" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
-    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.2-beta">
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.18-beta">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -39,18 +42,4 @@
     <ProjectReference Include="..\InteropDemo.WinForms\InteropDemo.WinForms.csproj" />
   </ItemGroup>
 
-<!--  <ItemGroup>-->
-<!--    <Compile Update="Views\FreeRdpView.axaml.cs">-->
-<!--      <DependentUpon>FreeRdpView.axaml</DependentUpon>-->
-<!--      <SubType>Code</SubType>-->
-<!--    </Compile>-->
-<!--    <Compile Update="Views\EoChromiumView.axaml.cs">-->
-<!--      <DependentUpon>EoChromiumView.axaml</DependentUpon>-->
-<!--      <SubType>Code</SubType>-->
-<!--    </Compile>-->
-<!--    <Compile Update="Views\ExternalApplicationView.axaml.cs">-->
-<!--      <DependentUpon>ExternalApplicationView.axaml</DependentUpon>-->
-<!--      <SubType>Code</SubType>-->
-<!--    </Compile>-->
-<!--  </ItemGroup>-->
 </Project>
