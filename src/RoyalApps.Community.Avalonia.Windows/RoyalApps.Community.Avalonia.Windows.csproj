@@ -17,8 +17,9 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0-windows</TargetFramework>
+        <RuntimeIdentifiers>win10-x64;win10-arm64</RuntimeIdentifiers>
         <Configurations>Debug;Release</Configurations>
-        <Platforms>AnyCPU;x64;ARM64</Platforms>
+        <Platforms>x64;ARM64</Platforms>
         <UseWindowsForms>true</UseWindowsForms>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -28,7 +29,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
+        <PackageReference Include="Avalonia" Version="11.0.0-rc2.2" />
         <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.2-beta">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

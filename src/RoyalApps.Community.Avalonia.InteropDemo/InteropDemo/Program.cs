@@ -16,6 +16,9 @@ class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .With(new Win32PlatformOptions{ UseWindowsUIComposition = true})
+            .With(new Win32PlatformOptions
+            {
+                CompositionMode = new [] {Win32CompositionMode.WinUIComposition, Win32CompositionMode.LowLatencyDxgiSwapChain, Win32CompositionMode.RedirectionSurface},
+            })
             .LogToTrace();
 }
