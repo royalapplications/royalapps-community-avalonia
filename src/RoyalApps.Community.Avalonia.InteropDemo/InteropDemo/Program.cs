@@ -18,7 +18,8 @@ class Program
             .UsePlatformDetect()
             .With(new Win32PlatformOptions
             {
-                CompositionMode = new [] {Win32CompositionMode.WinUIComposition, Win32CompositionMode.LowLatencyDxgiSwapChain, Win32CompositionMode.RedirectionSurface},
+                OverlayPopups = true,
+                //CompositionMode = new [] {Win32CompositionMode.RedirectionSurface},
             })
             .LogToTrace();
 }

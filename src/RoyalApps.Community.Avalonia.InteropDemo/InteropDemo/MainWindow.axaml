@@ -3,27 +3,33 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interopDemo="clr-namespace:InteropDemo"
+        xmlns:windows="clr-namespace:RoyalApps.Community.Avalonia.Windows;assembly=RoyalApps.Community.Avalonia.Windows"
+        xmlns:viewModels="clr-namespace:InteropDemo.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         UseLayoutRounding="True" RenderOptions.BitmapInterpolationMode="HighQuality"
-        x:Class="InteropDemo.MainWindow"
-        TransparencyLevelHint="AcrylicBlur"
         Title="Interop Demo"
-        ExtendClientAreaToDecorationsHint="False"
-        ExtendClientAreaChromeHints="PreferSystemChrome">
-        <Panel>
-                <ExperimentalAcrylicBorder IsHitTestVisible="False">
-                        <ExperimentalAcrylicBorder.Material>
-                                <ExperimentalAcrylicMaterial BackgroundSource="Digger"
-                                                             TintColor="{DynamicResource SystemAltHighColor}"
-                                                             TintOpacity="1"
-                                                             FallbackColor="{DynamicResource AcrylicFallbackColor}"
-                                                             MaterialOpacity="0.55" />
-                        </ExperimentalAcrylicBorder.Material>
-                </ExperimentalAcrylicBorder>
-                <Panel>
-                        <Panel>
-                                <interopDemo:MainView />
-                        </Panel>
-                </Panel>
-        </Panel>
+        TransparencyLevelHint="{Binding Transparency}"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
+        x:Class="InteropDemo.MainWindow"
+        x:DataType="viewModels:MainViewModel">
+        
+        <interopDemo:MainView />
+
+        <!-- <Panel> -->
+                <!-- <ExperimentalAcrylicBorder IsHitTestVisible="False"> -->
+                <!--         <ExperimentalAcrylicBorder.Material> -->
+                <!--                 <ExperimentalAcrylicMaterial BackgroundSource="Digger" -->
+                <!--                                              TintColor="{DynamicResource SystemAltHighColor}" -->
+                <!--                                              TintOpacity="1" -->
+                <!--                                              FallbackColor="{DynamicResource AcrylicFallbackColor}" -->
+                <!--                                              MaterialOpacity="0.55" /> -->
+                <!--         </ExperimentalAcrylicBorder.Material> -->
+                <!-- </ExperimentalAcrylicBorder> -->
+                <!-- <Panel> -->
+                <!--         <Panel> -->
+                <!--         </Panel> -->
+                <!-- </Panel> -->
+        <!-- </Panel> -->
+        
 </Window>

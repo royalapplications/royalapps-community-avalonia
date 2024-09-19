@@ -8,7 +8,7 @@ namespace InteropDemo;
 public class App : Application
 {
     public static MainViewModel MainViewModel;
-
+    
     static App()
     {
         MainViewModel = new MainViewModel();

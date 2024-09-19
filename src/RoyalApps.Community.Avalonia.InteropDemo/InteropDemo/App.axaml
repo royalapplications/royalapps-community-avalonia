@@ -3,5 +3,10 @@
              x:Class="InteropDemo.App">
     <Application.Styles>
         <FluentTheme />
+        
+        <Style Selector="Window[ActualTransparencyLevel=Mica]">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
     </Application.Styles>
 </Application>

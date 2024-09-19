@@ -11,7 +11,7 @@ public partial class TabViewModel : ViewModelBase, IDisposeWinFormsControl
 
     public event EventHandler<WinFormsDisposeEventArgs>? DisposeWinFormsControl;
 
-    [RelayCommand] public void Close() => App.MainViewModel.RemoveTab(this);
+    [RelayCommand] public void Close() => App.MainViewModel.RemoveTabCommand.Execute(this);
 
     public void RaiseTabClosing()
     {
