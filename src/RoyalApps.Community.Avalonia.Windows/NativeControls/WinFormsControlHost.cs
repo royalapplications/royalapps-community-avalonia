@@ -48,11 +48,8 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
     /// If not implemented, the instance will be created automatically.
     /// </summary>
     /// <returns>An instance of the WinForms control to host.</returns>
-    protected virtual T? OnCreateWinFormsControl()
-    {
-        return null;
-    }
-    
+    protected virtual T? OnCreateWinFormsControl() => null;
+
     /// <inheritdoc cref="DestroyNativeControlCore"/>
     protected sealed override void DestroyNativeControlCore(IPlatformHandle control)
     {
