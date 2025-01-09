@@ -17,9 +17,6 @@
 
     <PropertyGroup>
         <TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
-        <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
-        <Configurations>Debug;Release</Configurations>
-        <Platforms>x64;ARM64</Platforms>
         <UseWindowsForms>true</UseWindowsForms>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
