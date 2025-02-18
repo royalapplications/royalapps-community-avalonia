@@ -1,0 +1,15 @@
+﻿<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Documentation/">
+    <File Path="..\README.md" />
+  </Folder>
+  <Folder Name="/InteropDemo/">
+    <Project Path="RoyalApps.Community.Avalonia.InteropDemo\InteropDemo.WinForms\InteropDemo.WinForms.csproj" />
+    <Project Path="RoyalApps.Community.Avalonia.InteropDemo\InteropDemo\InteropDemo.csproj" />
+  </Folder>
+  <Project Path="RoyalApps.Community.Avalonia.Common\RoyalApps.Community.Avalonia.Common.csproj" />
+  <Project Path="RoyalApps.Community.Avalonia.Windows\RoyalApps.Community.Avalonia.Windows.csproj" />
+</Solution>
