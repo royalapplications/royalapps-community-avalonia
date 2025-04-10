@@ -1,4 +1,4 @@
-﻿namespace InteropDemo.ViewModels;
+namespace InteropDemo.ViewModels;
 
 public class TestViewModel : TabViewModel
 {
