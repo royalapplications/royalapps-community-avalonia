@@ -12,9 +12,9 @@ public class ViewLocator : IDataTemplate
         var name = data!.GetType().FullName!.Replace("ViewModel", "View");
         var type = Type.GetType(name);
 
-        if (type == null) 
+        if (type == null)
             return new TextBlock {Text = "Not Found: " + name};
-        
+
         var view = (Control)Activator.CreateInstance(type)!; // Create View
         return view;
     }

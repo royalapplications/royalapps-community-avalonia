@@ -41,7 +41,7 @@ public partial class MainViewModel : ViewModelBase
     {
         if (Application.Current is null)
             return;
-        
+
         Application.Current.RequestedThemeVariant = Application.Current.ActualThemeVariant == ThemeVariant.Light
             ? ThemeVariant.Dark
             : ThemeVariant.Light;

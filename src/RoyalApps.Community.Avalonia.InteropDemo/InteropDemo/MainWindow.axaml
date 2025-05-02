@@ -13,7 +13,7 @@
         ExtendClientAreaChromeHints="PreferSystemChrome"
         x:Class="InteropDemo.MainWindow"
         x:DataType="viewModels:MainViewModel">
-        
+
         <interopDemo:MainView />
 
         <!-- <Panel> -->
@@ -31,5 +31,6 @@
                 <!--         </Panel> -->
                 <!-- </Panel> -->
         <!-- </Panel> -->
-        
+
 </Window>
+

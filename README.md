@@ -1,4 +1,4 @@
-# Utilities and Helpers for AvaloniaUI 
+# Utilities and Helpers for AvaloniaUI
 
 [![NuGet Version](https://img.shields.io/nuget/v/RoyalApps.Community.Avalonia.Windows.svg?style=flat)](https://www.nuget.org/packages/RoyalApps.Community.Avalonia.Windows)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/RoyalApps.Community.Avalonia.Windows.svg?color=green)](https://www.nuget.org/packages/RoyalApps.Community.Avalonia.Windows)
@@ -45,7 +45,7 @@ You can find the `WinFormsControlHost` in the namespace `RoyalApps.Community.Ava
 </UserControl>
 ```
 
-> **Note**  
+> **Note**
 > Since the control is a generic type `WinFormsControlHost<T> where T : System.Windows.Forms.Control`, you need to specify the type of your WinForms control you want to host in the `x:TypeArguments` attribute.
 
 By default, the `WinFormsControlHost<T>` creates a new instance of your type automatically and keeps track of the instance. You can subclass the control and override the `OnCreateWinFormsControl()` method to create and return the instance of the WinForms control yourself.
@@ -84,9 +84,9 @@ Simply invoke the `DisposeWinFormsControl` event and pass the instance of the vi
 #### How does it work?
 The singleton class `WinFormsLifetimeManager` keeps the instances of all WinForms controls in a dictionary as long as they are required (not manually disposed).
 
-> **Note**  
-> The view model instance (which implements `IDisposeWinFormsControl`) will be used as `key` for the dictionary. Depending on your view model implementation, you might see issues with this approach when `GetHashcode` or `Equals` is overridden. 
+> **Note**
+> The view model instance (which implements `IDisposeWinFormsControl`) will be used as `key` for the dictionary. Depending on your view model implementation, you might see issues with this approach when `GetHashcode` or `Equals` is overridden.
 
 The `WinFormsControlHost` inherits from `NativeControlHost` and prevents the control from being destroyed. When an instance of the WinForms control is requested for a specific view model, you either get an existing instance if available, or an instance is created for you.
 
-When you are done (e.g. the view model is getting removed for good), you invoke the `DisposeWinFormsControl` event on your view model to signal the `WinFormsLifetimeManager` the WinForms control can be destroyed/disposed. 
+When you are done (e.g. the view model is getting removed for good), you invoke the `DisposeWinFormsControl` event on your view model to signal the `WinFormsLifetimeManager` the WinForms control can be destroyed/disposed.

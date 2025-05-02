@@ -9,7 +9,7 @@ namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 /// A NativeControlHost descendent which creates a WinForms control and keeps it alive and in memory,
 /// even when the hosting view is detached from the visual tree. Destruction/disposal of the control
 /// has to be invoked manually by implementing the the IDisposeWinFormsControl interface on your
-/// view model and raising the DisposeWinFormsControl event. 
+/// view model and raising the DisposeWinFormsControl event.
 /// </summary>
 /// <inheritdoc cref="NativeControlHost"/>
 /// <typeparam name="T">The type of the WinForms control you want to host.</typeparam>
@@ -19,7 +19,7 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
     /// The WinForms control.
     /// </summary>
     public T? Control => WinFormsLifetimeManager.Instance.GetControl(DataContext as IDisposeWinFormsControl) as T;
-    
+
     /// <inheritdoc cref="CreateNativeControlCore"/>
     protected sealed override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
     {
@@ -36,7 +36,7 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
         var newInstance = OnCreateWinFormsControl();
         if (newInstance != null)
             return new PlatformHandle(newInstance.Handle, "Hndl");
-        
+
         // create a new instance and store it in the dictionary
         newInstance = Activator.CreateInstance<T>();
         WinFormsLifetimeManager.Instance.AddControl(viewModel, newInstance);
