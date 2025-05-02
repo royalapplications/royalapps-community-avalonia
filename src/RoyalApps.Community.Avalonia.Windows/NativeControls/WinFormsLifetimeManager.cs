@@ -21,8 +21,8 @@ internal class WinFormsLifetimeManager
         viewModel.DisposeWinFormsControl += DisposeWinFormsControl;
     }
 
-    public Control? GetControl(IDisposeWinFormsControl? viewModel) => viewModel == null 
-        ? null 
+    public Control? GetControl(IDisposeWinFormsControl? viewModel) => viewModel == null
+        ? null
         : _controls.GetValueOrDefault(viewModel);
 
     private void DisposeWinFormsControl(object? sender, WinFormsDisposeEventArgs e)
@@ -33,9 +33,9 @@ internal class WinFormsLifetimeManager
         var existingInstance = GetControl(viewModel);
         if (existingInstance is null)
             return;
-        
+
         _controls.Remove(viewModel);
-        
+
         PInvoke.DestroyWindow(new HWND(existingInstance.Handle));
         existingInstance.Dispose();
     }
