@@ -2,7 +2,7 @@
 
 [![NuGet Version](https://img.shields.io/nuget/v/RoyalApps.Community.Avalonia.Windows.svg?style=flat)](https://www.nuget.org/packages/RoyalApps.Community.Avalonia.Windows)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/RoyalApps.Community.Avalonia.Windows.svg?color=green)](https://www.nuget.org/packages/RoyalApps.Community.Avalonia.Windows)
-[![.NET](https://img.shields.io/badge/.NET-%3E%3D%20%207.0-blueviolet)](https://dotnet.microsoft.com/download)
+[![.NET](https://img.shields.io/badge/.NET-%3E%3D%20%208.0-blueviolet)](https://dotnet.microsoft.com/download)
 
 # RoyalApps.Community.Avalonia
 RoyalApps.Community.Avalonia contains projects/packages for AvaloniaUI.
