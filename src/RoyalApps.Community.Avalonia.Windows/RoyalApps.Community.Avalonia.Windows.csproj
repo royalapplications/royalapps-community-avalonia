@@ -27,7 +27,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.8" />
+        <PackageReference Include="Avalonia" Version="11.3.9" />
         <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.248">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
