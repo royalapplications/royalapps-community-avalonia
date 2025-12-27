@@ -3,12 +3,16 @@
     <Platform Name="ARM64" />
     <Platform Name="x64" />
   </Configurations>
-  <Folder Name="/Documentation/">
-    <File Path="..\README.md" />
-  </Folder>
   <Folder Name="/InteropDemo/">
     <Project Path="RoyalApps.Community.Avalonia.InteropDemo\InteropDemo.WinForms\InteropDemo.WinForms.csproj" />
     <Project Path="RoyalApps.Community.Avalonia.InteropDemo\InteropDemo\InteropDemo.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../.gitignore" />
+    <File Path="../LICENSE" />
+    <File Path="../README.md" />
+    <File Path=".editorconfig" />
+    <File Path="Directory.Packages.props" />
   </Folder>
   <Project Path="RoyalApps.Community.Avalonia.Windows\RoyalApps.Community.Avalonia.Windows.csproj" />
 </Solution>
