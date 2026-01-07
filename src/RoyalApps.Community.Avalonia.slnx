@@ -4,8 +4,8 @@
     <Platform Name="x64" />
   </Configurations>
   <Folder Name="/InteropDemo/">
-    <Project Path="RoyalApps.Community.Avalonia.InteropDemo\InteropDemo.WinForms\InteropDemo.WinForms.csproj" />
-    <Project Path="RoyalApps.Community.Avalonia.InteropDemo\InteropDemo\InteropDemo.csproj" />
+    <Project Path="RoyalApps.Community.Avalonia.InteropDemo/InteropDemo.WinForms/InteropDemo.WinForms.csproj" />
+    <Project Path="RoyalApps.Community.Avalonia.InteropDemo/InteropDemo/InteropDemo.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.gitignore" />
@@ -14,5 +14,5 @@
     <File Path=".editorconfig" />
     <File Path="Directory.Packages.props" />
   </Folder>
-  <Project Path="RoyalApps.Community.Avalonia.Windows\RoyalApps.Community.Avalonia.Windows.csproj" />
+  <Project Path="RoyalApps.Community.Avalonia.Windows/RoyalApps.Community.Avalonia.Windows.csproj" />
 </Solution>
