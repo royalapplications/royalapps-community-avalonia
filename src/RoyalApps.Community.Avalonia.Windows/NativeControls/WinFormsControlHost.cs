@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using Windows.Win32.Foundation;
 using Control = System.Windows.Forms.Control;
 
 namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
@@ -15,6 +16,9 @@ namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 /// <typeparam name="T">The type of the WinForms control you want to host.</typeparam>
 public class WinFormsControlHost<T> : NativeControlHost where T : Control
 {
+    private HWND _hostParentHandle = HWND.Null;
+    private Control? _attachedHost;
+
     /// <summary>
     /// The WinForms control.
     /// </summary>
@@ -23,24 +27,22 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
     /// <inheritdoc cref="CreateNativeControlCore"/>
     protected sealed override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
     {
+        _hostParentHandle = new HWND(parent.Handle);
+
         // data context object is used as key in dictionary to locate existing control instances
         if (DataContext is not IDisposeWinFormsControl viewModel)
             throw new InvalidOperationException($"{nameof(DataContext)} must implement {nameof(IDisposeWinFormsControl)}.");
 
-        // get existing instance based on the data context object
-        var existingInstance = WinFormsLifetimeManager.Instance.GetControl(viewModel);
-        if (existingInstance is not null)
-            return new PlatformHandle(existingInstance.Handle, "Hndl");
+        if (WinFormsLifetimeManager.Instance.GetHost(viewModel) is null)
+        {
+            var newInstance = OnCreateWinFormsControl() ?? Activator.CreateInstance<T>();
+            WinFormsLifetimeManager.Instance.AddControl(viewModel, newInstance);
+        }
 
-        // check if a WinForms control is provided
-        var newInstance = OnCreateWinFormsControl();
-        if (newInstance != null)
-            return new PlatformHandle(newInstance.Handle, "Hndl");
+        _attachedHost = WinFormsLifetimeManager.Instance.AttachHost(viewModel, _hostParentHandle)
+            ?? throw new InvalidOperationException("Failed to attach a hosted WinForms site.");
 
-        // create a new instance and store it in the dictionary
-        newInstance = Activator.CreateInstance<T>();
-        WinFormsLifetimeManager.Instance.AddControl(viewModel, newInstance);
-        return new PlatformHandle(newInstance.Handle, "Hndl");
+        return new PlatformHandle(_attachedHost.Handle, "Hndl");
     }
 
     /// <summary>
@@ -53,6 +55,12 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
     /// <inheritdoc cref="DestroyNativeControlCore"/>
     protected sealed override void DestroyNativeControlCore(IPlatformHandle control)
     {
-        // do not destroy/dispose the WinForms control here as it is managed in the WinFormsLifetimeManager
+        if (DataContext is IDisposeWinFormsControl viewModel && _attachedHost is not null)
+        {
+            WinFormsLifetimeManager.Instance.ParkHost(viewModel, _attachedHost, _hostParentHandle);
+        }
+
+        _attachedHost = null;
+        _hostParentHandle = HWND.Null;
     }
 }
