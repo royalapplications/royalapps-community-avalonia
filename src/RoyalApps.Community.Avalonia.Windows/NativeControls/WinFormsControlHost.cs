@@ -1,4 +1,5 @@
 using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using Windows.Win32.Foundation;
@@ -41,8 +42,33 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
 
         _attachedHost = WinFormsLifetimeManager.Instance.AttachHost(viewModel, _hostParentHandle)
             ?? throw new InvalidOperationException("Failed to attach a hosted WinForms site.");
+        UpdateAttachedHostBounds(Bounds.Size);
 
         return new PlatformHandle(_attachedHost.Handle, "Hndl");
+    }
+
+    /// <inheritdoc />
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        var measured = base.MeasureOverride(availableSize);
+
+        var width = ResolveExplicitLength(Width, MaxWidth, availableSize.Width);
+        var height = ResolveExplicitLength(Height, MaxHeight, availableSize.Height);
+
+        if (width is null && height is null)
+            return measured;
+
+        return new Size(
+            width ?? measured.Width,
+            height ?? measured.Height);
+    }
+
+    /// <inheritdoc />
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        var arranged = base.ArrangeOverride(finalSize);
+        UpdateAttachedHostBounds(finalSize);
+        return arranged;
     }
 
     /// <summary>
@@ -62,5 +88,39 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
 
         _attachedHost = null;
         _hostParentHandle = HWND.Null;
+    }
+
+    private void UpdateAttachedHostBounds(Size logicalSize)
+    {
+        if (_attachedHost is null)
+            return;
+
+        var scaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? VisualRoot?.RenderScaling ?? 1D;
+        var pixelWidth = Math.Max(1, (int)Math.Ceiling(logicalSize.Width * scaling));
+        var pixelHeight = Math.Max(1, (int)Math.Ceiling(logicalSize.Height * scaling));
+
+        if (_attachedHost.Bounds.Width == pixelWidth && _attachedHost.Bounds.Height == pixelHeight)
+            return;
+
+        _attachedHost.Bounds = new System.Drawing.Rectangle(
+            System.Drawing.Point.Empty,
+            new System.Drawing.Size(pixelWidth, pixelHeight));
+    }
+
+    private static double? ResolveExplicitLength(double value, double maxValue, double available)
+    {
+        var hasValue = !double.IsNaN(value);
+        var candidate = hasValue ? value : double.NaN;
+
+        if (!double.IsNaN(maxValue))
+            candidate = hasValue ? Math.Min(candidate, maxValue) : maxValue;
+
+        if (double.IsNaN(candidate))
+            return null;
+
+        if (!double.IsInfinity(available))
+            candidate = Math.Min(candidate, available);
+
+        return Math.Max(0D, candidate);
     }
 }

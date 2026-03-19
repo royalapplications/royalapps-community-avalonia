@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 
@@ -71,7 +72,7 @@ internal class WinFormsLifetimeManager
         if (PInvoke.GetParent(hostControlHandle) != hostHandle)
             PInvoke.SetParent(hostControlHandle, hostHandle);
 
-        attachedHost.Bounds = new System.Drawing.Rectangle(System.Drawing.Point.Empty, attachedHost.Size);
+        attachedHost.Bounds = new System.Drawing.Rectangle(System.Drawing.Point.Empty, GetParentClientSize(hostHandle, attachedHost.Size));
         attachedHost.Visible = true;
         attachedHost.Show();
         attachedHost.BringToFront();
@@ -177,6 +178,16 @@ internal class WinFormsLifetimeManager
         {
             Dock = DockStyle.Fill
         };
+
+    private static System.Drawing.Size GetParentClientSize(HWND parentHandle, System.Drawing.Size fallback)
+    {
+        if (parentHandle == HWND.Null || !PInvoke.GetClientRect(parentHandle, out var clientRect))
+            return fallback;
+
+        var width = Math.Max(1, clientRect.right - clientRect.left);
+        var height = Math.Max(1, clientRect.bottom - clientRect.top);
+        return new System.Drawing.Size(width, height);
+    }
 
     private sealed class HostedControlSite : Panel
     {
