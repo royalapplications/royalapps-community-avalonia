@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
-using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 
 internal class WinFormsLifetimeManager
 {
-    private static readonly Lazy<WinFormsLifetimeManager> _instance = new (() => new WinFormsLifetimeManager(), LazyThreadSafetyMode.ExecutionAndPublication);
-    public static WinFormsLifetimeManager Instance => _instance.Value;
+    private static readonly Lazy<WinFormsLifetimeManager> SingletonInstance = new (() => new WinFormsLifetimeManager(), LazyThreadSafetyMode.ExecutionAndPublication);
+    public static WinFormsLifetimeManager Instance => SingletonInstance.Value;
     private readonly Dictionary<IDisposeWinFormsControl, Control> _controls = new();
     private readonly Dictionary<IDisposeWinFormsControl, HostedControlSite> _hosts = new();
     private Form? _parkingWindow;
@@ -38,7 +38,7 @@ internal class WinFormsLifetimeManager
     {
         ArgumentNullException.ThrowIfNull(viewModel);
 
-        if (!_hosts.TryGetValue(viewModel, out var persistentHost))
+        if (!TryGetPersistentHost(viewModel, out var persistentHost))
             return null;
 
         if (persistentHost.Parent is { } currentParent)
@@ -56,6 +56,7 @@ internal class WinFormsLifetimeManager
 
         if (hostHandle == HWND.Null)
         {
+            DetachPersistentHost(attachedHost, persistentHost);
             attachedHost.Dispose();
             return null;
         }
@@ -65,6 +66,7 @@ internal class WinFormsLifetimeManager
         var hostControlHandle = new HWND(attachedHost.Handle);
         if (hostControlHandle == HWND.Null)
         {
+            DetachPersistentHost(attachedHost, persistentHost);
             attachedHost.Dispose();
             return null;
         }
@@ -72,7 +74,7 @@ internal class WinFormsLifetimeManager
         if (PInvoke.GetParent(hostControlHandle) != hostHandle)
             PInvoke.SetParent(hostControlHandle, hostHandle);
 
-        attachedHost.Bounds = new System.Drawing.Rectangle(System.Drawing.Point.Empty, GetParentClientSize(hostHandle, attachedHost.Size));
+        attachedHost.Bounds = new Rectangle(Point.Empty, GetParentClientSize(hostHandle, attachedHost.Size));
         attachedHost.Visible = true;
         attachedHost.Show();
         attachedHost.BringToFront();
@@ -92,13 +94,16 @@ internal class WinFormsLifetimeManager
         if (hostControlHandle == HWND.Null)
             return;
 
+        _hosts.TryGetValue(viewModel, out var persistentHost);
+
         if (expectedCurrentParent != HWND.Null && PInvoke.GetParent(hostControlHandle) != expectedCurrentParent)
         {
+            DetachPersistentHost(attachedHost, persistentHost);
             attachedHost.Dispose();
             return;
         }
 
-        if (!_hosts.TryGetValue(viewModel, out var persistentHost))
+        if (persistentHost is null)
         {
             attachedHost.Dispose();
             return;
@@ -106,6 +111,7 @@ internal class WinFormsLifetimeManager
 
         if (!ReferenceEquals(persistentHost.Parent, attachedHost))
         {
+            DetachPersistentHost(attachedHost, persistentHost);
             attachedHost.Dispose();
             return;
         }
@@ -128,6 +134,39 @@ internal class WinFormsLifetimeManager
         _parkingHost.ResumeLayout(true);
         parkingWindow.ResumeLayout(true);
         attachedHost.Dispose();
+    }
+
+    private bool TryGetPersistentHost(IDisposeWinFormsControl viewModel, out HostedControlSite persistentHost)
+    {
+        if (_hosts.TryGetValue(viewModel, out persistentHost!))
+        {
+            if (!persistentHost.IsDisposed)
+                return true;
+
+            _hosts.Remove(viewModel);
+        }
+
+        if (!_controls.TryGetValue(viewModel, out var control) || control.IsDisposed)
+        {
+            persistentHost = null!;
+            return false;
+        }
+
+        persistentHost = new HostedControlSite(control);
+        _hosts[viewModel] = persistentHost;
+        return true;
+    }
+
+    private static void DetachPersistentHost(Control attachedHost, HostedControlSite? persistentHost)
+    {
+        if (persistentHost is null || persistentHost.IsDisposed)
+            return;
+
+        if (!ReferenceEquals(persistentHost.Parent, attachedHost))
+            return;
+
+        attachedHost.Controls.Remove(persistentHost);
+        persistentHost.Parent = null;
     }
 
     private void DisposeWinFormsControl(object? sender, WinFormsDisposeEventArgs e)
@@ -163,8 +202,8 @@ internal class WinFormsLifetimeManager
             FormBorderStyle = FormBorderStyle.None,
             ShowInTaskbar = false,
             StartPosition = FormStartPosition.Manual,
-            Location = new System.Drawing.Point(-32000, -32000),
-            Size = new System.Drawing.Size(1, 1),
+            Location = new Point(-32000, -32000),
+            Size = new Size(1, 1),
             Opacity = 0,
             Text = "Hidden Host"
         };
@@ -179,14 +218,14 @@ internal class WinFormsLifetimeManager
             Dock = DockStyle.Fill
         };
 
-    private static System.Drawing.Size GetParentClientSize(HWND parentHandle, System.Drawing.Size fallback)
+    private static Size GetParentClientSize(HWND parentHandle, Size fallback)
     {
         if (parentHandle == HWND.Null || !PInvoke.GetClientRect(parentHandle, out var clientRect))
             return fallback;
 
         var width = Math.Max(1, clientRect.right - clientRect.left);
         var height = Math.Max(1, clientRect.bottom - clientRect.top);
-        return new System.Drawing.Size(width, height);
+        return new Size(width, height);
     }
 
     private sealed class HostedControlSite : Panel
