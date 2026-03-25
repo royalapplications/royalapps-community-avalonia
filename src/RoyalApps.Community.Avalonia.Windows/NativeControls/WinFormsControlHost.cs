@@ -42,7 +42,7 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
 
         _attachedHost = WinFormsLifetimeManager.Instance.AttachHost(viewModel, _hostParentHandle)
             ?? throw new InvalidOperationException("Failed to attach a hosted WinForms site.");
-        UpdateAttachedHostBounds(Bounds.Size);
+        UpdateAttachedHostBounds(GetHostedLogicalSize(Bounds.Size));
 
         return new PlatformHandle(_attachedHost.Handle, "Hndl");
     }
@@ -67,8 +67,22 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
     protected override Size ArrangeOverride(Size finalSize)
     {
         var arranged = base.ArrangeOverride(finalSize);
-        UpdateAttachedHostBounds(finalSize);
+        UpdateAttachedHostBounds(GetHostedLogicalSize(finalSize));
         return arranged;
+    }
+
+    /// <inheritdoc />
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == WidthProperty ||
+            change.Property == HeightProperty ||
+            change.Property == MaxWidthProperty ||
+            change.Property == MaxHeightProperty)
+        {
+            UpdateAttachedHostBounds(GetHostedLogicalSize(Bounds.Size));
+        }
     }
 
     /// <summary>
@@ -105,6 +119,13 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
         _attachedHost.Bounds = new System.Drawing.Rectangle(
             System.Drawing.Point.Empty,
             new System.Drawing.Size(pixelWidth, pixelHeight));
+    }
+
+    private Size GetHostedLogicalSize(Size fallback)
+    {
+        var width = ResolveExplicitLength(Width, MaxWidth, fallback.Width) ?? fallback.Width;
+        var height = ResolveExplicitLength(Height, MaxHeight, fallback.Height) ?? fallback.Height;
+        return new Size(width, height);
     }
 
     private static double? ResolveExplicitLength(double value, double maxValue, double available)
