@@ -2,6 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using Windows.Win32;
 using Windows.Win32.Foundation;
 using Control = System.Windows.Forms.Control;
 
@@ -17,6 +18,7 @@ namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 /// <typeparam name="T">The type of the WinForms control you want to host.</typeparam>
 public class WinFormsControlHost<T> : NativeControlHost where T : Control
 {
+    private const double DevicePixelSnapEpsilon = 0.0001;
     private HWND _hostParentHandle = HWND.Null;
     private Control? _attachedHost;
 
@@ -110,8 +112,14 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
             return;
 
         var scaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? VisualRoot?.RenderScaling ?? 1D;
-        var pixelWidth = Math.Max(1, (int)Math.Ceiling(logicalSize.Width * scaling));
-        var pixelHeight = Math.Max(1, (int)Math.Ceiling(logicalSize.Height * scaling));
+        var pixelWidth = ConvertLogicalToDevicePixels(logicalSize.Width, scaling);
+        var pixelHeight = ConvertLogicalToDevicePixels(logicalSize.Height, scaling);
+
+        if (TryGetHostParentClientSize(out var parentClientSize))
+        {
+            pixelWidth = parentClientSize.Width;
+            pixelHeight = parentClientSize.Height;
+        }
 
         if (_attachedHost.Bounds.Width == pixelWidth && _attachedHost.Bounds.Height == pixelHeight)
             return;
@@ -119,6 +127,19 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
         _attachedHost.Bounds = new System.Drawing.Rectangle(
             System.Drawing.Point.Empty,
             new System.Drawing.Size(pixelWidth, pixelHeight));
+    }
+
+    private bool TryGetHostParentClientSize(out System.Drawing.Size clientSize)
+    {
+        clientSize = default;
+
+        if (_hostParentHandle == HWND.Null || !PInvoke.GetClientRect(_hostParentHandle, out var clientRect))
+            return false;
+
+        var width = Math.Max(1, clientRect.right - clientRect.left);
+        var height = Math.Max(1, clientRect.bottom - clientRect.top);
+        clientSize = new System.Drawing.Size(width, height);
+        return true;
     }
 
     private Size GetHostedLogicalSize(Size fallback)
@@ -143,5 +164,10 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
             candidate = Math.Min(candidate, available);
 
         return Math.Max(0D, candidate);
+    }
+
+    private static int ConvertLogicalToDevicePixels(double logicalSize, double scaling)
+    {
+        return Math.Max(1, (int)Math.Floor((logicalSize * scaling) + DevicePixelSnapEpsilon));
     }
 }
