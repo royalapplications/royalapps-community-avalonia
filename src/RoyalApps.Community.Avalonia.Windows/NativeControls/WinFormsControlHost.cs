@@ -2,6 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Control = System.Windows.Forms.Control;
@@ -19,8 +20,10 @@ namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 public class WinFormsControlHost<T> : NativeControlHost where T : Control
 {
     private const double DevicePixelSnapEpsilon = 0.0001;
+    private static readonly TimeSpan DeferredBoundsRefreshDelay = TimeSpan.FromMilliseconds(40);
     private HWND _hostParentHandle = HWND.Null;
     private Control? _attachedHost;
+    private int _boundsRefreshVersion;
 
     /// <summary>
     /// The WinForms control.
@@ -45,6 +48,7 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
         _attachedHost = WinFormsLifetimeManager.Instance.AttachHost(viewModel, _hostParentHandle)
             ?? throw new InvalidOperationException("Failed to attach a hosted WinForms site.");
         UpdateAttachedHostBounds(GetHostedLogicalSize(Bounds.Size));
+        ScheduleAttachedHostBoundsRefresh();
 
         return new PlatformHandle(_attachedHost.Handle, "Hndl");
     }
@@ -97,6 +101,8 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
     /// <inheritdoc cref="DestroyNativeControlCore"/>
     protected sealed override void DestroyNativeControlCore(IPlatformHandle control)
     {
+        _boundsRefreshVersion++;
+
         if (DataContext is IDisposeWinFormsControl viewModel && _attachedHost is not null)
         {
             WinFormsLifetimeManager.Instance.ParkHost(viewModel, _attachedHost, _hostParentHandle);
@@ -127,6 +133,22 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
         _attachedHost.Bounds = new System.Drawing.Rectangle(
             System.Drawing.Point.Empty,
             new System.Drawing.Size(pixelWidth, pixelHeight));
+    }
+
+    private void ScheduleAttachedHostBoundsRefresh()
+    {
+        var version = ++_boundsRefreshVersion;
+
+        void RefreshBounds()
+        {
+            if (version != _boundsRefreshVersion || _attachedHost is null)
+                return;
+
+            UpdateAttachedHostBounds(GetHostedLogicalSize(Bounds.Size));
+        }
+
+        Dispatcher.UIThread.Post(RefreshBounds, DispatcherPriority.Loaded);
+        DispatcherTimer.RunOnce(RefreshBounds, DeferredBoundsRefreshDelay);
     }
 
     private bool TryGetHostParentClientSize(out System.Drawing.Size clientSize)
