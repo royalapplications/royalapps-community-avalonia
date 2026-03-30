@@ -8,7 +8,7 @@ namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 public interface IDisposeWinFormsControl
 {
     /// <summary>
-    /// Raise this event whenever you want to finally destroy/dispose your WinForms control.
+    /// Raise this event whenever you want to finally destroy/dispose of your WinForms control.
     /// </summary>
     /// <inheritdoc cref="EventHandler{TEventArgs}"/>
     event EventHandler<WinFormsDisposeEventArgs> DisposeWinFormsControl;

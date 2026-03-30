@@ -1,10 +1,7 @@
 using System;
-using Avalonia;
+using Windows.Win32.Foundation;
 using Avalonia.Controls;
 using Avalonia.Platform;
-using Avalonia.Threading;
-using Windows.Win32;
-using Windows.Win32.Foundation;
 using Control = System.Windows.Forms.Control;
 
 namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
@@ -12,18 +9,15 @@ namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 /// <summary>
 /// A NativeControlHost descendent which creates a WinForms control and keeps it alive and in memory,
 /// even when the hosting view is detached from the visual tree. Destruction/disposal of the control
-/// has to be invoked manually by implementing the the IDisposeWinFormsControl interface on your
+/// has to be invoked manually by implementing the IDisposeWinFormsControl interface on your
 /// view model and raising the DisposeWinFormsControl event.
 /// </summary>
 /// <inheritdoc cref="NativeControlHost"/>
 /// <typeparam name="T">The type of the WinForms control you want to host.</typeparam>
 public class WinFormsControlHost<T> : NativeControlHost where T : Control
 {
-    private const double DevicePixelSnapEpsilon = 0.0001;
-    private static readonly TimeSpan DeferredBoundsRefreshDelay = TimeSpan.FromMilliseconds(40);
     private HWND _hostParentHandle = HWND.Null;
     private Control? _attachedHost;
-    private int _boundsRefreshVersion;
 
     /// <summary>
     /// The WinForms control.
@@ -47,48 +41,8 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
 
         _attachedHost = WinFormsLifetimeManager.Instance.AttachHost(viewModel, _hostParentHandle)
             ?? throw new InvalidOperationException("Failed to attach a hosted WinForms site.");
-        UpdateAttachedHostBounds(GetHostedLogicalSize(Bounds.Size));
-        ScheduleAttachedHostBoundsRefresh();
 
         return new PlatformHandle(_attachedHost.Handle, "Hndl");
-    }
-
-    /// <inheritdoc />
-    protected override Size MeasureOverride(Size availableSize)
-    {
-        var measured = base.MeasureOverride(availableSize);
-
-        var width = ResolveExplicitLength(Width, MaxWidth, availableSize.Width);
-        var height = ResolveExplicitLength(Height, MaxHeight, availableSize.Height);
-
-        if (width is null && height is null)
-            return measured;
-
-        return new Size(
-            width ?? measured.Width,
-            height ?? measured.Height);
-    }
-
-    /// <inheritdoc />
-    protected override Size ArrangeOverride(Size finalSize)
-    {
-        var arranged = base.ArrangeOverride(finalSize);
-        UpdateAttachedHostBounds(GetHostedLogicalSize(finalSize));
-        return arranged;
-    }
-
-    /// <inheritdoc />
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-
-        if (change.Property == WidthProperty ||
-            change.Property == HeightProperty ||
-            change.Property == MaxWidthProperty ||
-            change.Property == MaxHeightProperty)
-        {
-            UpdateAttachedHostBounds(GetHostedLogicalSize(Bounds.Size));
-        }
     }
 
     /// <summary>
@@ -101,8 +55,6 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
     /// <inheritdoc cref="DestroyNativeControlCore"/>
     protected sealed override void DestroyNativeControlCore(IPlatformHandle control)
     {
-        _boundsRefreshVersion++;
-
         if (DataContext is IDisposeWinFormsControl viewModel && _attachedHost is not null)
         {
             WinFormsLifetimeManager.Instance.ParkHost(viewModel, _attachedHost, _hostParentHandle);
@@ -110,86 +62,5 @@ public class WinFormsControlHost<T> : NativeControlHost where T : Control
 
         _attachedHost = null;
         _hostParentHandle = HWND.Null;
-    }
-
-    private void UpdateAttachedHostBounds(Size logicalSize)
-    {
-        if (_attachedHost is null)
-            return;
-
-        var scaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? VisualRoot?.RenderScaling ?? 1D;
-        var pixelWidth = ConvertLogicalToDevicePixels(logicalSize.Width, scaling);
-        var pixelHeight = ConvertLogicalToDevicePixels(logicalSize.Height, scaling);
-
-        if (TryGetHostParentClientSize(out var parentClientSize))
-        {
-            pixelWidth = parentClientSize.Width;
-            pixelHeight = parentClientSize.Height;
-        }
-
-        if (_attachedHost.Bounds.Width == pixelWidth && _attachedHost.Bounds.Height == pixelHeight)
-            return;
-
-        _attachedHost.Bounds = new System.Drawing.Rectangle(
-            System.Drawing.Point.Empty,
-            new System.Drawing.Size(pixelWidth, pixelHeight));
-    }
-
-    private void ScheduleAttachedHostBoundsRefresh()
-    {
-        var version = ++_boundsRefreshVersion;
-
-        void RefreshBounds()
-        {
-            if (version != _boundsRefreshVersion || _attachedHost is null)
-                return;
-
-            UpdateAttachedHostBounds(GetHostedLogicalSize(Bounds.Size));
-        }
-
-        Dispatcher.UIThread.Post(RefreshBounds, DispatcherPriority.Loaded);
-        DispatcherTimer.RunOnce(RefreshBounds, DeferredBoundsRefreshDelay);
-    }
-
-    private bool TryGetHostParentClientSize(out System.Drawing.Size clientSize)
-    {
-        clientSize = default;
-
-        if (_hostParentHandle == HWND.Null || !PInvoke.GetClientRect(_hostParentHandle, out var clientRect))
-            return false;
-
-        var width = Math.Max(1, clientRect.right - clientRect.left);
-        var height = Math.Max(1, clientRect.bottom - clientRect.top);
-        clientSize = new System.Drawing.Size(width, height);
-        return true;
-    }
-
-    private Size GetHostedLogicalSize(Size fallback)
-    {
-        var width = ResolveExplicitLength(Width, MaxWidth, fallback.Width) ?? fallback.Width;
-        var height = ResolveExplicitLength(Height, MaxHeight, fallback.Height) ?? fallback.Height;
-        return new Size(width, height);
-    }
-
-    private static double? ResolveExplicitLength(double value, double maxValue, double available)
-    {
-        var hasValue = !double.IsNaN(value);
-        var candidate = hasValue ? value : double.NaN;
-
-        if (!double.IsNaN(maxValue))
-            candidate = hasValue ? Math.Min(candidate, maxValue) : maxValue;
-
-        if (double.IsNaN(candidate))
-            return null;
-
-        if (!double.IsInfinity(available))
-            candidate = Math.Min(candidate, available);
-
-        return Math.Max(0D, candidate);
-    }
-
-    private static int ConvertLogicalToDevicePixels(double logicalSize, double scaling)
-    {
-        return Math.Max(1, (int)Math.Floor((logicalSize * scaling) + DevicePixelSnapEpsilon));
     }
 }

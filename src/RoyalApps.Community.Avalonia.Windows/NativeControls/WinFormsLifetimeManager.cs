@@ -10,12 +10,11 @@ namespace RoyalApps.Community.Avalonia.Windows.NativeControls;
 
 internal class WinFormsLifetimeManager
 {
-    private static readonly Lazy<WinFormsLifetimeManager> SingletonInstance = new (() => new WinFormsLifetimeManager(), LazyThreadSafetyMode.ExecutionAndPublication);
-    public static WinFormsLifetimeManager Instance => SingletonInstance.Value;
     private readonly Dictionary<IDisposeWinFormsControl, Control> _controls = new();
     private readonly Dictionary<IDisposeWinFormsControl, HostedControlSite> _hosts = new();
-    private Form? _parkingWindow;
-    private Panel? _parkingHost;
+    private static readonly Lazy<WinFormsLifetimeManager> SingletonInstance = new (() => new WinFormsLifetimeManager(), LazyThreadSafetyMode.ExecutionAndPublication);
+
+    public static WinFormsLifetimeManager Instance => SingletonInstance.Value;
 
     private WinFormsLifetimeManager() { }
 
@@ -89,7 +88,6 @@ internal class WinFormsLifetimeManager
         ArgumentNullException.ThrowIfNull(viewModel);
         ArgumentNullException.ThrowIfNull(attachedHost);
 
-        var parkingWindow = EnsureParkingWindow();
         var hostControlHandle = new HWND(attachedHost.Handle);
         if (hostControlHandle == HWND.Null)
             return;
@@ -116,23 +114,8 @@ internal class WinFormsLifetimeManager
             return;
         }
 
-        _parkingHost ??= CreateParkingHost();
-
-        parkingWindow.SuspendLayout();
-        _parkingHost.SuspendLayout();
-
-        if (_parkingHost.Parent is null)
-            parkingWindow.Controls.Add(_parkingHost);
-
         attachedHost.Controls.Remove(persistentHost);
-        persistentHost.Parent = _parkingHost;
-        persistentHost.Dock = DockStyle.Fill;
-        persistentHost.Visible = true;
-        persistentHost.Show();
-        persistentHost.BringToFront();
-
-        _parkingHost.ResumeLayout(true);
-        parkingWindow.ResumeLayout(true);
+        persistentHost.Parent = null;
         attachedHost.Dispose();
     }
 
@@ -182,41 +165,7 @@ internal class WinFormsLifetimeManager
         _hosts.Remove(viewModel);
 
         existingHost.Dispose();
-
-        if (_controls.Count == 0)
-        {
-            _parkingHost?.Dispose();
-            _parkingHost = null;
-            _parkingWindow?.Dispose();
-            _parkingWindow = null;
-        }
     }
-
-    private Form EnsureParkingWindow()
-    {
-        if (_parkingWindow is not null && !_parkingWindow.IsDisposed)
-            return _parkingWindow;
-
-        _parkingWindow = new Form
-        {
-            FormBorderStyle = FormBorderStyle.None,
-            ShowInTaskbar = false,
-            StartPosition = FormStartPosition.Manual,
-            Location = new Point(-32000, -32000),
-            Size = new Size(1, 1),
-            Opacity = 0,
-            Text = "Hidden Host"
-        };
-
-        _ = _parkingWindow.Handle;
-        return _parkingWindow;
-    }
-
-    private static Panel CreateParkingHost() =>
-        new()
-        {
-            Dock = DockStyle.Fill
-        };
 
     private static Size GetParentClientSize(HWND parentHandle, Size fallback)
     {
