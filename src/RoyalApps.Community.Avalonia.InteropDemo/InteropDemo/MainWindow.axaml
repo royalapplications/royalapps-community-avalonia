@@ -10,7 +10,6 @@
         Title="Interop Demo"
         TransparencyLevelHint="{Binding Transparency}"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="PreferSystemChrome"
         x:Class="InteropDemo.MainWindow"
         x:DataType="viewModels:MainViewModel">
 
