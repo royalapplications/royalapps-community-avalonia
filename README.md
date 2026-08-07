@@ -7,6 +7,28 @@
 # RoyalApps.Community.Avalonia
 RoyalApps.Community.Avalonia contains projects/packages for AvaloniaUI.
 
+## RoyalApps.Community.Avalonia.Common
+
+This project contains reusable, cross-platform Avalonia controls and behaviors.
+
+### Equalizing a GridSplitter on double-tap
+
+Add the behavior namespace to your XAML and opt in on an individual `GridSplitter`:
+
+```xaml
+<Grid xmlns="https://github.com/avaloniaui"
+      xmlns:behaviors="clr-namespace:RoyalApps.Community.Avalonia.Common.Behaviors;assembly=RoyalApps.Community.Avalonia.Common"
+      ColumnDefinitions="*,Auto,*">
+    <GridSplitter
+        Grid.Column="1"
+        behaviors:GridSplitterBehavior.EqualizeOnDoubleTapped="True"
+        ResizeDirection="Columns"
+        ResizeBehavior="PreviousAndNext" />
+</Grid>
+```
+
+The behavior restores the two definitions selected by the splitter to an equal 50/50 allocation. Both definitions must use star sizing. Pixel-sized and `Auto` definitions are left unchanged, and minimum and maximum constraints are respected.
+
 ## RoyalApps.Community.Avalonia.Windows
 This package contains a WinFormsControlHost with a custom lifecycle management. XAML based controls like the TabControl in Avalonia, detach and attach views dynamically when switching between tabs. In general, this is a good approach to make rendering and resource utilization efficient.
 

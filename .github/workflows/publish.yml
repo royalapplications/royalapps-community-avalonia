@@ -39,6 +39,11 @@ jobs:
         dotnet-version: '10.0.x'
 
     # Build
+    - name: test common project
+      run: dotnet test -c Release tests/RoyalApps.Community.Avalonia.Common.Tests/RoyalApps.Community.Avalonia.Common.Tests.csproj
+      env:
+        Configuration: ${{ matrix.configuration }}
+
     - name: build project
       run: dotnet build -c Release src/RoyalApps.Community.Avalonia.Windows/RoyalApps.Community.Avalonia.Windows.csproj
       env:
