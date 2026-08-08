@@ -13,6 +13,7 @@
     <File Path="../README.md" />
     <File Path=".editorconfig" />
     <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
   </Folder>
   <Project Path="RoyalApps.Community.Avalonia.Common/RoyalApps.Community.Avalonia.Common.csproj" />
   <Project Path="RoyalApps.Community.Avalonia.Windows/RoyalApps.Community.Avalonia.Windows.csproj" />
