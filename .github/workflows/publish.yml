@@ -41,6 +41,7 @@ jobs:
     # Build
     - name: test common project
       run: dotnet test -c Release src/RoyalApps.Community.Avalonia.Common.Tests/RoyalApps.Community.Avalonia.Common.Tests.csproj
+      working-directory: src
       env:
         Configuration: ${{ matrix.configuration }}
 
