@@ -16,5 +16,5 @@
   </Folder>
   <Project Path="RoyalApps.Community.Avalonia.Common/RoyalApps.Community.Avalonia.Common.csproj" />
   <Project Path="RoyalApps.Community.Avalonia.Windows/RoyalApps.Community.Avalonia.Windows.csproj" />
-  <Project Path="../tests/RoyalApps.Community.Avalonia.Common.Tests/RoyalApps.Community.Avalonia.Common.Tests.csproj" />
+  <Project Path="RoyalApps.Community.Avalonia.Common.Tests/RoyalApps.Community.Avalonia.Common.Tests.csproj" />
 </Solution>
