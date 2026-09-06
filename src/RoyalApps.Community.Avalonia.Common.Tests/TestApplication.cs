@@ -17,5 +17,6 @@ public static class TestApplicationBuilder
     public static AppBuilder BuildAvaloniaApp() =>
         AppBuilder
             .Configure<TestApplication>()
+            .UseSkia()
             .UseHeadless(new AvaloniaHeadlessPlatformOptions());
 }

@@ -8,6 +8,9 @@
     <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="Avalonia.Skia" Version="12.1.2" />
+    <PackageVersion Include="SkiaSharp" Version="4.151.1" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="4.151.1" />
     <PackageVersion Include="Avalonia" Version="12.1.2" />
     <PackageVersion Include="Avalonia.Desktop" Version="12.1.2" />
     <PackageVersion Include="Avalonia.Headless" Version="12.1.2" />

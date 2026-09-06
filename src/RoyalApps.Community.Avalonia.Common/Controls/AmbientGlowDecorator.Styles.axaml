@@ -1,0 +1,36 @@
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:common="clr-namespace:RoyalApps.Community.Avalonia.Common.Controls">
+    <Styles.Resources>
+        <ControlTheme x:Key="{x:Type common:AmbientGlowDecorator}"
+                      TargetType="common:AmbientGlowDecorator" x:DataType="common:AmbientGlowDecorator">
+            <Setter Property="AmbientColor" Value="DodgerBlue" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Panel>
+                        <Border Background="{TemplateBinding Background}"
+                                BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                IsHitTestVisible="False" />
+                        <common:AmbientGlowSurface Name="PART_GlowSurface" />
+                        <ContentPresenter Name="PART_ContentPresenter"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Padding="{TemplateBinding Padding}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Panel>
+                </ControlTemplate>
+            </Setter>
+        </ControlTheme>
+    </Styles.Resources>
+    <Style Selector="common|AmbientGlowDecorator">
+        <Setter Property="Theme" Value="{StaticResource {x:Type common:AmbientGlowDecorator}}" />
+    </Style>
+</Styles>

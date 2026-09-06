@@ -1,10 +1,11 @@
-name: Avalonia WinForms Package
+name: Avalonia Packages
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   # only allowed to read source code (ref. https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs)
@@ -50,6 +51,9 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
 
+    - name: Pack Common
+      run: dotnet pack --no-build -c Release src/RoyalApps.Community.Avalonia.Common/RoyalApps.Community.Avalonia.Common.csproj -o .
+
     # Pack nuget package
     - name: dotnet pack
       run: dotnet pack --no-build -c Release src/RoyalApps.Community.Avalonia.Windows/RoyalApps.Community.Avalonia.Windows.csproj -o .
@@ -63,8 +67,4 @@ jobs:
         name: Avalonia-nupkg
         path: ./*.nupkg
 
-    # Push nuget package to nuget.org
-    - name: nuget push
-      run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
-      env:
-        Configuration: ${{ matrix.configuration }}
+    # Publication is a separate maintainer action after reviewing the release artifacts.

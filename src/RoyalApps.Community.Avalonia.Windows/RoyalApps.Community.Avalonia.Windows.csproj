@@ -12,7 +12,6 @@
         <PackageIcon>RoyalApps_1024.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RootNamespace>RoyalApps.Community.Avalonia.Windows</RootNamespace>
-        <Version>1.2.0</Version>
     </PropertyGroup>
 
     <PropertyGroup>

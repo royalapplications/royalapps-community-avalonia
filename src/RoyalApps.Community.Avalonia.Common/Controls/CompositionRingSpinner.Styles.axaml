@@ -1,0 +1,17 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:common="clr-namespace:RoyalApps.Community.Avalonia.Common.Controls">
+
+    <Design.PreviewWith>
+        <StackPanel Margin="20" Spacing="12">
+            <common:CompositionRingSpinner Width="12" Height="12" StrokeThickness="1.5" />
+            <common:CompositionRingSpinner Width="16" Height="16" />
+            <common:CompositionRingSpinner Width="24" Height="24" StrokeThickness="2.5" />
+            <common:CompositionRingSpinner Width="32" Height="32" StrokeThickness="3" />
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <Style Selector="common|CompositionRingSpinner">
+        <Setter Property="ForegroundColor" Value="DodgerBlue" />
+    </Style>
+</Styles>

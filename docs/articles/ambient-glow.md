@@ -1,0 +1,42 @@
+# Ambient glow decoration
+
+`AmbientGlowDecorator` decorates content with a contained accent bloom and a traveling border highlight. It requires only Avalonia.
+
+Include the theme in your application's styles:
+
+```xml
+<StyleInclude Source="avares://RoyalApps.Community.Avalonia.Common/Controls/AmbientGlowDecorator.Styles.axaml" />
+```
+
+Declare `xmlns:common="clr-namespace:RoyalApps.Community.Avalonia.Common.Controls;assembly=RoyalApps.Community.Avalonia.Common"` in the consuming view, then wrap content:
+
+```xml
+<common:AmbientGlowDecorator AmbientColor="DodgerBlue" Padding="12" CornerRadius="8">
+    <ContentControl Content="{Binding Content}" />
+</common:AmbientGlowDecorator>
+```
+
+Give binding scopes their normal explicit `x:DataType`. Transparent child backgrounds reveal the interior glow. Content is not clipped to the rounded corners, but is clipped to the control's rectangular bounds by default. Set `ClipToBounds="False"` on the decorator to allow content overflow; ancestor clipping still applies. Standalone defaults are DodgerBlue and an 8-DIP corner radius. The control is not focusable and leaves content input and focus intact.
+
+## Color and animation
+
+`AmbientColorLight` and `AmbientColorDark` are optional overrides. Light mode falls back to `AmbientColor`. Dark mode uses the explicit dark override, or blends the light override 25% toward white while preserving alpha, or falls back to `AmbientColor`. `EffectiveAmbientColor` is the observable, read-only resolved color and can drive accompanying tints.
+
+`CycleDuration` defaults to nine seconds and must be positive. `HighlightThickness` defaults to 0.5 DIP and must be positive and finite. `GlowOpacity` ranges from zero to one, defaults to one, and does not dim the sharp highlight.
+
+`IsAnimationEnabled` and `IsMotionAllowed` both default to true. Motion requires both permissions, effective visibility, effective enabled state, attachment, and nonempty bounds. Hosts can bind `IsMotionAllowed` to their global motion preference independently of local `IsAnimationEnabled`. Without composition, the control draws a stationary fallback without a UI-thread timer. Detachment stops the compositor and disposes ancestor visibility subscriptions.
+
+## Example
+
+```xml
+<common:AmbientGlowDecorator AmbientColorLight="#16863C"
+                            AmbientColorDark="#57C879"
+                            Padding="16" CornerRadius="12"
+                            IsAnimationEnabled="False">
+    <ContentControl Content="{Binding Content}" />
+</common:AmbientGlowDecorator>
+```
+
+Omit `AmbientColorDark` to derive it from the light color. Set `IsAnimationEnabled="False"` for a stationary decoration. A host can bind `IsMotionAllowed` independently to its global motion preference.
+
+See the [API reference](../api/reference/royalapps-community-avalonia-common-controls-ambientglowdecorator) for defaults and validation rules.

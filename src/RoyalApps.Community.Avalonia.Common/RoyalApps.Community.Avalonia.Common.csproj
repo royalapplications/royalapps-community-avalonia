@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <Product>RoyalApps.Community.Avalonia.Common</Product>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/royalapplications/royalapps-community-avalonia</RepositoryUrl>
+    <PackageTags>Avalonia;Controls;Spinner;Behaviors</PackageTags>
     <Description>Provides common controls and behaviors for Avalonia applications.</Description>
     <Company>Royal Apps GmbH</Company>
     <Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)), Royal Apps GmbH, Austria</Copyright>
@@ -13,10 +16,13 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
     <PackageReference Include="Avalonia" />
+    <InternalsVisibleTo Include="RoyalApps.Community.Avalonia.Common.Tests" />
   </ItemGroup>
 
 </Project>

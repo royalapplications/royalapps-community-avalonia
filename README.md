@@ -1,114 +1,35 @@
-# Utilities and Helpers for AvaloniaUI
-
-[![NuGet Version](https://img.shields.io/nuget/v/RoyalApps.Community.Avalonia.Windows.svg?style=flat)](https://www.nuget.org/packages/RoyalApps.Community.Avalonia.Windows)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/RoyalApps.Community.Avalonia.Windows.svg?color=green)](https://www.nuget.org/packages/RoyalApps.Community.Avalonia.Windows)
-[![.NET](https://img.shields.io/badge/.NET-%3E%3D%20%208.0-blueviolet)](https://dotnet.microsoft.com/download)
-
 # RoyalApps.Community.Avalonia
-RoyalApps.Community.Avalonia contains projects/packages for AvaloniaUI.
 
-## RoyalApps.Community.Avalonia.Common
+Reusable controls and behaviors for Avalonia, plus Windows Forms hosting with explicit lifetime management.
 
-This project contains reusable, cross-platform Avalonia controls and behaviors.
+[![NuGet](https://img.shields.io/nuget/v/RoyalApps.Community.Avalonia.Windows.svg)](https://www.nuget.org/packages/RoyalApps.Community.Avalonia.Windows)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/royalapplications/royalapps-community-avalonia/blob/main/LICENSE)
 
-### Equalizing a GridSplitter on double-tap
+## Libraries
 
-Add the behavior namespace to your XAML and opt in on an individual `GridSplitter`:
+| Library | Features | Platform |
+| --- | --- | --- |
+| `RoyalApps.Community.Avalonia.Common` | AmbientGlowDecorator, CompositionRingSpinner, and GridSplitterBehavior | Cross-platform Avalonia |
+| `RoyalApps.Community.Avalonia.Windows` | WinFormsControlHost with persistent control state and explicit disposal | Windows |
 
-```xaml
-<Grid xmlns="https://github.com/avaloniaui"
-      xmlns:behaviors="clr-namespace:RoyalApps.Community.Avalonia.Common.Behaviors;assembly=RoyalApps.Community.Avalonia.Common"
-      ColumnDefinitions="*,Auto,*">
-    <GridSplitter
-        Grid.Column="1"
-        behaviors:GridSplitterBehavior.EqualizeOnDoubleTapped="True"
-        ResizeDirection="Columns"
-        ResizeBehavior="PreviousAndNext" />
-</Grid>
-```
+The current source targets .NET 10 and Avalonia 12.1.2. Published package requirements can differ; check the version you install.
 
-The behavior restores the two definitions selected by the splitter to an equal 50/50 allocation. Both definitions must use star sizing. Pixel-sized and `Auto` definitions are left unchanged, and minimum and maximum constraints are respected.
+## Documentation
 
-## RoyalApps.Community.Avalonia.Windows
-This package contains a WinFormsControlHost with a custom lifecycle management. XAML based controls like the TabControl in Avalonia, detach and attach views dynamically when switching between tabs. In general, this is a good approach to make rendering and resource utilization efficient.
+Read the [documentation](https://royalapplications.github.io/royalapps-community-avalonia/) or start with the [getting started guide](https://royalapplications.github.io/royalapps-community-avalonia/articles/getting-started), then explore:
 
-Putting a NativeControlHost in such a view can cause issues because every time the view gets detached and another one attached, the native control is destroyed and recreated. If you want to host legacy WinForms controls, for example, you might want to have more control over the lifetime of your user control.
+- [Ambient glow](https://royalapplications.github.io/royalapps-community-avalonia/articles/ambient-glow)
+- [Ring spinner](https://royalapplications.github.io/royalapps-community-avalonia/articles/ring-spinner)
+- [GridSplitter behavior](https://royalapplications.github.io/royalapps-community-avalonia/articles/grid-splitter)
+- [WinForms hosting](https://royalapplications.github.io/royalapps-community-avalonia/articles/winforms-hosting)
+- [Generated API reference](https://royalapplications.github.io/royalapps-community-avalonia/api/)
 
-![InteropDemo](https://raw.githubusercontent.com/royalapplications/royalapps-community-avalonia/main/docs/assets/InteropDemo.gif)
+See the [contributing guide](https://royalapplications.github.io/royalapps-community-avalonia/articles/contributing) for documentation maintenance.
 
-The demo application as shown above, creates a view with a WinFormsControlHost for each tab. The WinForms control (also part of the demo app), simply contains a text box, prints an "instance id" and has a random background color to demonstrate that the instances "survive" and keep the state until manually disposed.
+## Sample application
 
-### Installation
-Install the RoyalApps.Community.Avalonia.Windows with NuGet:
-```
-Install-Package RoyalApps.Community.Avalonia.Windows
-```
-or via the command line interface:
-```
-dotnet add package RoyalApps.Community.Avalonia.Windows
-```
+The [InteropDemo](https://github.com/royalapplications/royalapps-community-avalonia/tree/main/src/RoyalApps.Community.Avalonia.InteropDemo) demonstrates WinForms controls retaining their state across tab changes.
 
-### Using the WinFormsNativeHost Control
+## License
 
-#### Add the Control
-
-You can find the `WinFormsControlHost` in the namespace `RoyalApps.Community.Avalonia.Windows.NativeControls`:
-```xaml
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:winForms="clr-namespace:InteropDemo.WinForms;assembly=InteropDemo.WinForms"
-             xmlns:nativeControls="clr-namespace:RoyalApps.Community.Avalonia.Windows.NativeControls;assembly=RoyalApps.Community.Avalonia.Windows"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="InteropDemo.Views.TestView"
-             Padding="10">
-    <nativeControls:WinFormsControlHost x:Name="WinFormsControlHost" x:TypeArguments="winForms:TestControl" />
-</UserControl>
-```
-
-> **Note**
-> Since the control is a generic type `WinFormsControlHost<T> where T : System.Windows.Forms.Control`, you need to specify the type of your WinForms control you want to host in the `x:TypeArguments` attribute.
-
-By default, the `WinFormsControlHost<T>` creates a new instance of your type automatically and keeps track of the instance. You can subclass the control and override the `OnCreateWinFormsControl()` method to create and return the instance of the WinForms control yourself.
-
-To configure your control (e.g. set properties), use the `OnLoaded()` override:
-```csharp
-protected override void OnLoaded()
-{
-    base.OnLoaded();
-
-    if (WinFormsControlHost.Control is not { } testControl)
-        return;
-    testControl.BackColor = Color.White;
-}
-```
-
-#### Manage the Lifetime of the Control
-In the view model you use as data context where you placed the `WinFormsControlHost`, simply implement the `IDisposeWinFormsControl` interface:
-```csharp
-public partial class TabViewModel : ViewModelBase, IDisposeWinFormsControl
-{
-    [ObservableProperty] private string _caption = "n/a";
-
-    public event EventHandler<WinFormsDisposeEventArgs>? DisposeWinFormsControl;
-
-    [RelayCommand] public void Close() => App.MainViewModel.RemoveTab(this);
-
-    public void RaiseTabClosing()
-    {
-        DisposeWinFormsControl?.Invoke(this, new WinFormsDisposeEventArgs(this));
-    }
-}
-```
-Simply invoke the `DisposeWinFormsControl` event and pass the instance of the view model to the `WinFormsDisposeEventArgs` constructor.
-
-#### How does it work?
-The singleton class `WinFormsLifetimeManager` keeps the instances of all WinForms controls in a dictionary as long as they are required (not manually disposed).
-
-> **Note**
-> The view model instance (which implements `IDisposeWinFormsControl`) will be used as `key` for the dictionary. Depending on your view model implementation, you might see issues with this approach when `GetHashcode` or `Equals` is overridden.
-
-The `WinFormsControlHost` inherits from `NativeControlHost` and prevents the control from being destroyed. When an instance of the WinForms control is requested for a specific view model, you either get an existing instance if available, or an instance is created for you.
-
-When you are done (e.g. the view model is getting removed for good), you invoke the `DisposeWinFormsControl` event on your view model to signal the `WinFormsLifetimeManager` the WinForms control can be destroyed/disposed.
+[MIT](https://github.com/royalapplications/royalapps-community-avalonia/blob/main/LICENSE) · Royal Apps GmbH
