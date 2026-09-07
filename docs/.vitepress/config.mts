@@ -23,7 +23,7 @@ export default defineConfig({
         { text: 'Ring spinner', link: '/articles/ring-spinner' },
         { text: 'GridSplitter behavior', link: '/articles/grid-splitter' },
         { text: 'WinForms hosting', link: '/articles/winforms-hosting' },
-        { text: 'Contributing to the docs', link: '/articles/contributing' }
+        { text: 'Contributing', link: '/articles/contributing' }
       ] },
       { text: 'API reference', items: [{ text: 'Overview', link: '/api/' }, ...apiSidebar] }
     ],

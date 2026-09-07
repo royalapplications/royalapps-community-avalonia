@@ -67,7 +67,34 @@ jobs:
         name: Avalonia-nupkg
         path: ./*.nupkg
 
+  publish:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+    - name: Download packages from this run
+      uses: actions/download-artifact@v8
+      with:
+        name: Avalonia-nupkg
+        path: packages
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: '10.0.x'
+
+    # The NuGet policy must trust this repository and publish.yml.
+    # NUGET_USER is the NuGet username of the user who created the policy.
+    - name: Log in to NuGet.org with Trusted Publishing
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ vars.NUGET_USER }}
+
     # Publish new versions on main; reruns and unchanged versions are skipped.
     - name: Publish packages to NuGet.org
-      if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-      run: dotnet nuget push "*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+      run: dotnet nuget push "packages/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate

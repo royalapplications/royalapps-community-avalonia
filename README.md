@@ -24,7 +24,7 @@ Read the [documentation](https://royalapplications.github.io/royalapps-community
 - [WinForms hosting](https://royalapplications.github.io/royalapps-community-avalonia/articles/winforms-hosting)
 - [Generated API reference](https://royalapplications.github.io/royalapps-community-avalonia/api/)
 
-See the [contributing guide](https://royalapplications.github.io/royalapps-community-avalonia/articles/contributing) for documentation maintenance.
+See the [contributing guide](https://royalapplications.github.io/royalapps-community-avalonia/articles/contributing) for code changes, testing, and documentation updates.
 
 ## Sample application
 

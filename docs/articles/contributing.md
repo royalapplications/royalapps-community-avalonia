@@ -1,88 +1,52 @@
-# Contributing to the docs
+# Contributing
 
-The documentation uses VitePress with the default theme, Royal Apps branding, local search, and a guide/API sidebar, following the structure of the [RoyalApps RDP documentation](https://github.com/royalapplications/royalapps-community-rdp/tree/main/docs).
+Contributions can improve controls, fix bugs, add tests, or make the documentation easier to use. Keep each change focused and include enough context for someone else to understand the problem and verify the result.
 
-## Local development
+## Working on the code
 
-Use Node.js 22 or newer and the .NET 10 SDK. From the repository root:
+Use the .NET 10 SDK. Windows is required to run the Windows Forms integration and its sample application.
 
-```sh
-npm ci
-npm run docs:dev
-```
+The source is organized into:
 
-Open the local URL printed by VitePress. To validate and preview the production output:
+- `src/RoyalApps.Community.Avalonia.Common/`: reusable, cross-platform controls and behaviors
+- `src/RoyalApps.Community.Avalonia.Windows/`: Windows-specific controls and integration
+- `src/RoyalApps.Community.Avalonia.Common.Tests/`: control, rendering, and lifetime tests
+- `src/RoyalApps.Community.Avalonia.InteropDemo/`: the Windows Forms hosting sample
 
-```sh
-npm run docs:build
-npm run docs:preview
-```
+Follow the conventions of the surrounding code. Keep cross-platform functionality in Common and Windows-specific functionality in Windows. Keep implementation helpers internal and document public APIs with XML comments, including defaults, supported values, and lifetime requirements where relevant.
 
-The build first compiles the Common and Windows libraries in Release mode and generates their API reference. It then checks internal page links and writes the site to `docs/.vitepress/dist`. The Windows library is cross-targeted on non-Windows hosts; native controls are not executed during generation.
+For control changes, preserve styling and binding behavior. Check attachment and detachment, visibility changes, and disposal of event handlers, subscriptions, and rendering resources. Avoid leaving background work running when a control is hidden or detached.
 
-## Content layout
+## Verifying a change
 
-- `docs/articles/`: task-oriented guides
-- `docs/api/`: generated public API reference and sidebar (ignored by Git)
-- `scripts/generate-api-docs.mjs`: adapted RDP API generator
-- `docs/.vitepress/config.mts`: navigation, search, and GitHub Pages base path
-- `docs/.vitepress/theme/`: default theme extension
-- `docs/public/assets/`: shared site branding
-- `docs/assets/`: guide media, including the existing interop demo
-
-## API generation
-
-The generator is adapted from [Community.Rdp](https://github.com/royalapplications/royalapps-community-rdp/blob/main/scripts/generate-api-docs.mjs). It combines compiler XML documentation with C# source inspection, without loading the built assemblies. It preserves member types, parameters, cross-links, related types, and locally resolvable `inheritdoc` comments.
-
-Both `docs:dev` and `docs:build` regenerate the reference. To run generation independently:
+Build the affected libraries and run the relevant tests. From the repository root:
 
 ```sh
-npm run docs:api
-npm run docs:test
-```
-
-After a successful package restore, generation can run without network access:
-
-```sh
-npm run docs:api -- --no-restore
-npm exec -- vitepress build docs
-```
-
-Update XML documentation in `src/` rather than editing generated pages. The sidebar groups types by library and namespace. Internal implementation types and framework overrides are omitted; protected extension points such as `OnCreateWinFormsControl` are included. Inherited documentation from external framework assemblies is not expanded.
-
-The lightweight source parser follows the RDP generator's file-scoped namespace and declaration conventions. Parser regression tests cover the generic hosts, attached properties, expression-bodied accessors, and multiline declarations used here. If new declaration forms are introduced, update the parser and tests alongside the source.
-
-The generator builds both projects and renders all pages before replacing output. It removes stale Markdown only inside `docs/api/reference/`, and leaves hand-authored guides alone. Generated files are ignored by Git. The README is a short entry point; detailed usage belongs in the guides.
-
-## Package validation and release
-
-The package workflow builds and tests Common, builds Windows, and uploads both
-Release packages. Successful pushes to `main` automatically publish both packages
-to NuGet.org using the repository's `NUGET_API_KEY` secret. Existing versions are
-skipped with `--skip-duplicate`, so a new shared version publishes both packages.
-Pull requests only build, test, and upload artifacts. Manual runs on `main` can
-retry publication.
-
-Common and Windows share version `1.3.0`, defined once in `src/Directory.Build.props`.
-Bump that shared version for each release and build both packages together, even
-when only one library changes. Never reuse a published version for different contents.
-Produce a local feed with:
-
-```sh
+dotnet build src/RoyalApps.Community.Avalonia.Common -c Release
 dotnet test src/RoyalApps.Community.Avalonia.Common.Tests -c Release
-dotnet pack src/RoyalApps.Community.Avalonia.Common -c Release -o artifacts/packages
-dotnet pack src/RoyalApps.Community.Avalonia.Windows -c Release -o artifacts/packages
 ```
 
-The package contains XML API documentation and the compiled standalone styles.
-Restore consumers using this local feed and pin the same version in every
-consuming project. When rebuilding an unpublished version, use a fresh validation
-package cache to avoid testing a previous archive with the same version.
+For Windows integration changes, also build the Windows library and try the affected behavior in the sample application on Windows:
 
-## GitHub Pages publishing
+```sh
+dotnet build src/RoyalApps.Community.Avalonia.Windows -c Release
+dotnet run --project src/RoyalApps.Community.Avalonia.InteropDemo/InteropDemo
+```
 
-The site base is `/royalapps-community-avalonia/`. The documentation workflow validates pull requests and relevant pushes to `main`, and uploads the built site as an artifact. Successful runs on `main` automatically deploy to GitHub Pages; pull requests never deploy.
+Add a regression test when fixing a bug and cover new public behavior with tests. For visual changes, check relevant sizes, display scales, themes, and active or inactive states. For lifetime changes, verify repeated attachment and detachment as well as final cleanup.
 
-GitHub Pages must use **GitHub Actions** as its source. A manual documentation workflow run on `main` also deploys the site. Deployment uses the `github-pages` environment and its configured approval rules.
+## Adding or editing documentation
 
-The expected site URL is `https://royalapplications.github.io/royalapps-community-avalonia/`. Building this repository locally does not enable Pages or publish the site.
+Edit the Markdown guides in `docs/articles/`. Update the relevant guide alongside any change to a control's behavior or public API.
+
+When adding a guide, use a descriptive filename and a clear page title. Explain what the feature does, show a small working C# or XAML example, and describe any important defaults or limitations. Link to related guides so readers can find the next step.
+
+Keep examples self-contained: include the namespaces, styles, and setup needed to use them. Put supporting images in `docs/public/assets/` and give them descriptive alternative text.
+
+Update API descriptions in the XML comments beside the public members in `src/`. Keep the README brief and link to guides for detailed explanations. For a new feature or guide, include any needed navigation updates in the contribution.
+
+Check spelling, links, and code examples before submitting. Write for someone using the feature for the first time.
+
+## Submitting a contribution
+
+In the pull request, explain the problem, what the change does, and how you verified it. Include reproduction steps for a bug fix and screenshots for visual changes when they help reviewers. Call out any compatibility changes or behavior you could not verify.
