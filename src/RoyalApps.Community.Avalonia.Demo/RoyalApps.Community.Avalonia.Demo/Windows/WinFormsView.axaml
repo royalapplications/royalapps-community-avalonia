@@ -1,0 +1,12 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:vm="using:RoyalApps.Community.Avalonia.Demo.ViewModels" xmlns:views="using:RoyalApps.Community.Avalonia.Demo.Views"
+ x:Class="RoyalApps.Community.Avalonia.Demo.Views.WinFormsView" x:DataType="vm:WinFormsViewModel">
+ <StackPanel Spacing="16">
+  <Button Content="Add native tab" Command="{Binding AddTabCommand}" />
+  <TextBlock Text="Type in a tab, switch tabs or visit another component, then return. Reset closes all tabs and creates two fresh controls." TextWrapping="Wrap" />
+  <TabControl ItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}" Height="280">
+   <TabControl.ItemTemplate><DataTemplate x:DataType="vm:NativeTabViewModel"><StackPanel Orientation="Horizontal" Spacing="10"><TextBlock Text="{Binding Caption}" VerticalAlignment="Center" /><Button Content="×" Command="{Binding CloseCommand}" AutomationProperties.Name="Close native tab" /></StackPanel></DataTemplate></TabControl.ItemTemplate>
+   <TabControl.ContentTemplate><views:NativeTabViewLocator /></TabControl.ContentTemplate>
+  </TabControl>
+ </StackPanel>
+</UserControl>

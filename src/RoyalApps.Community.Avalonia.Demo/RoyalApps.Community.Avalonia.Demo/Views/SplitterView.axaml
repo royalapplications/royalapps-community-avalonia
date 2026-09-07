@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:vm="using:RoyalApps.Community.Avalonia.Demo.ViewModels" xmlns:common="using:RoyalApps.Community.Avalonia.Common.Controls"
+ xmlns:behaviors="using:RoyalApps.Community.Avalonia.Common.Behaviors"
+ x:Class="RoyalApps.Community.Avalonia.Demo.Views.SplitterView" x:DataType="vm:SplitterViewModel">
+<StackPanel Spacing="20">
+ <CheckBox Content="Equalize adjacent panes on double-tap" IsChecked="{Binding EqualizeEnabled, Mode=TwoWay}" />
+ <Grid ColumnDefinitions="*,20,*" Height="280">
+  <Grid RowDefinitions="Auto,*">
+   <TextBlock Text="Columns" Classes="section" Margin="0,0,0,12" />
+   <Grid Grid.Row="1" x:Name="ColumnsPreview">
+    <Grid.ColumnDefinitions><ColumnDefinition Width="{Binding LeftWidth, Mode=TwoWay}" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="{Binding RightWidth, Mode=TwoWay}" /></Grid.ColumnDefinitions>
+    <Border Background="#203B82F6" Padding="12"><TextBlock Text="Left" /></Border>
+    <GridSplitter Grid.Column="1" Width="8" HorizontalAlignment="Stretch" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext"
+     behaviors:GridSplitterBehavior.EqualizeOnDoubleTapped="{Binding EqualizeEnabled}" AutomationProperties.Name="Resize columns" />
+    <Border Grid.Column="2" Background="#209370DB" Padding="12"><TextBlock Text="Right" /></Border>
+   </Grid>
+  </Grid>
+  <Grid Grid.Column="2" RowDefinitions="Auto,*">
+   <TextBlock Text="Rows" Classes="section" Margin="0,0,0,12" />
+   <Grid Grid.Row="1" x:Name="RowsPreview">
+    <Grid.RowDefinitions><RowDefinition Height="{Binding TopHeight, Mode=TwoWay}" /><RowDefinition Height="Auto" /><RowDefinition Height="{Binding BottomHeight, Mode=TwoWay}" /></Grid.RowDefinitions>
+    <Border Background="#203B82F6" Padding="12"><TextBlock Text="Top" /></Border>
+    <GridSplitter Grid.Row="1" Height="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"
+     behaviors:GridSplitterBehavior.EqualizeOnDoubleTapped="{Binding EqualizeEnabled}" AutomationProperties.Name="Resize rows" />
+    <Border Grid.Row="2" Background="#209370DB" Padding="12"><TextBlock Text="Bottom" /></Border>
+   </Grid>
+  </Grid>
+ </Grid>
+ <TextBlock Text="Reset restores the original 2:1 proportions. Focus a splitter and use the arrow keys to resize it." TextWrapping="Wrap" />
+</StackPanel></UserControl>

@@ -1,0 +1,4 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:vm="using:RoyalApps.Community.Avalonia.Demo.ViewModels" xmlns:common="using:RoyalApps.Community.Avalonia.Common.Controls"
+ xmlns:behaviors="using:RoyalApps.Community.Avalonia.Common.Behaviors"
+ x:Class="RoyalApps.Community.Avalonia.Demo.Views.UnavailableView" x:DataType="vm:WinFormsViewModel"><Border Classes="card"><StackPanel Spacing="12"><TextBlock Text="Available on Windows" Classes="section" /><TextBlock Text="Run the Windows build to interact with hosted Windows Forms controls. The usage example below explains the lifetime contract." TextWrapping="Wrap" /></StackPanel></Border></UserControl>

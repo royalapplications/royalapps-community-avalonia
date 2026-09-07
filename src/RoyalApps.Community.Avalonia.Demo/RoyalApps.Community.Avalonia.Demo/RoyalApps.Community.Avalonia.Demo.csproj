@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <DemoWindows Condition="'$(DemoWindows)' == ''">$([MSBuild]::IsOSPlatform('Windows'))</DemoWindows>
+    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework Condition="'$(DemoWindows)' == 'true'">net10.0-windows</TargetFramework>
+    <UseWindowsForms Condition="'$(DemoWindows)' == 'true'">true</UseWindowsForms>
+    <ApplicationManifest Condition="'$(DemoWindows)' == 'true'">app.manifest</ApplicationManifest>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Condition="'$(Configuration)' == 'Debug'" />
+    <ProjectReference Include="../../RoyalApps.Community.Avalonia.Common/RoyalApps.Community.Avalonia.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(DemoWindows)' == 'true'">
+    <ProjectReference Include="../../RoyalApps.Community.Avalonia.Windows/RoyalApps.Community.Avalonia.Windows.csproj" />
+    <ProjectReference Include="../RoyalApps.Community.Avalonia.Demo.WinForms/RoyalApps.Community.Avalonia.Demo.WinForms.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(DemoWindows)' != 'true'">
+    <Compile Remove="Windows/**/*.cs" />
+    <AvaloniaResource Remove="Windows/**/*.axaml" />
+    <AvaloniaXaml Remove="Windows/**/*.axaml" />
+  </ItemGroup>
+</Project>

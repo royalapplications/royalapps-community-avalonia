@@ -28,7 +28,24 @@ See the [contributing guide](https://royalapplications.github.io/royalapps-commu
 
 ## Sample application
 
-The [InteropDemo](https://github.com/royalapplications/royalapps-community-avalonia/tree/main/src/RoyalApps.Community.Avalonia.InteropDemo) demonstrates WinForms controls retaining their state across tab changes.
+The [component demo](https://github.com/royalapplications/royalapps-community-avalonia/tree/main/src/RoyalApps.Community.Avalonia.Demo) showcases all four components with live previews, property editors, reset actions, and usage snippets. Common samples run on Windows, macOS, and Linux; native WinForms hosting is available on Windows.
+
+```sh
+dotnet run --project src/RoyalApps.Community.Avalonia.Demo/RoyalApps.Community.Avalonia.Demo
+```
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/public/assets/demo/sample-browser-dark.png"><img alt="The component browser showing the ring spinner sample and its property editors" src="docs/public/assets/demo/sample-browser-light.png"></picture>
+
+<details>
+<summary>Animated component previews</summary>
+
+| Ambient glow | Ring spinner |
+| --- | --- |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="docs/public/assets/demo/ambient-glow-dark.gif"><img alt="Traveling highlight and ambient bloom" src="docs/public/assets/demo/ambient-glow-light.gif"></picture> | <picture><source media="(prefers-color-scheme: dark)" srcset="docs/public/assets/demo/ring-spinner-dark.gif"><img alt="Rotating ring with a growing and shrinking arc" src="docs/public/assets/demo/ring-spinner-light.gif"></picture> |
+| GridSplitter sample: resize and reset | WinForms: state across tabs |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="docs/public/assets/demo/grid-splitter-dark.gif"><img alt="Resizing columns and rows, then resetting the sample proportions" src="docs/public/assets/demo/grid-splitter-light.gif"></picture> | <picture><source media="(prefers-color-scheme: dark)" srcset="docs/public/assets/demo/winforms-hosting-dark.gif"><img alt="Native text and instance identity preserved across tab changes" src="docs/public/assets/demo/winforms-hosting-light.gif"></picture> |
+
+</details>
 
 ## License
 

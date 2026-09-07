@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:RoyalApps.Community.Avalonia.Demo.ViewModels"
+    x:Class="RoyalApps.Community.Avalonia.Demo.Views.UiThreadDemoView" x:DataType="vm:UiThreadDemoViewModel">
+    <Border Classes="card" Padding="20">
+        <StackPanel Spacing="12">
+            <TextBlock Text="Compare with a standard Avalonia animation" FontWeight="SemiBold" FontSize="16" />
+            <ProgressBar IsIndeterminate="True" Height="6" HorizontalAlignment="Stretch"
+                AutomationProperties.Name="Standard Avalonia progress bar" />
+            <TextBlock Text="The standard progress bar pauses; compositor animations above keep running. Input will pause for five seconds."
+                TextWrapping="Wrap" FontSize="13" />
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <Button Content="Block UI thread for 5 seconds" Command="{Binding BlockUiThreadCommand}" />
+            </StackPanel>
+            <TextBlock Text="{Binding Status}" TextWrapping="Wrap" FontSize="13" />
+        </StackPanel>
+    </Border>
+</UserControl>

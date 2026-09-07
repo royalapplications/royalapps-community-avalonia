@@ -5,6 +5,20 @@
 visual, independently of UI dispatcher work. Avoid blocking the dispatcher in
 application code: input and layout still need it.
 
+<DemoMedia name="ring-spinner" alt="The ring spinner sample with size, stroke, and color controls" />
+
+::: details Watch the spinner animation
+
+<DemoMedia name="ring-spinner" alt="The compositor-driven ring continues while the UI thread is blocked; the standard Avalonia progress bar pauses." animated />
+
+The compositor-driven ring continues while the UI thread is blocked; the standard Avalonia progress bar pauses.
+
+:::
+
+## Try the sample
+
+Choose **Block UI thread for 5 seconds** to compare the ring with the standard indeterminate Avalonia `ProgressBar` on the same page. After a short preparation delay, the dispatcher is deliberately blocked. The ring continues to animate while the progress bar and input pause; the UI resumes automatically after five seconds.
+
 ## Standalone setup
 
 Reference Common and include its optional standalone style in your application:

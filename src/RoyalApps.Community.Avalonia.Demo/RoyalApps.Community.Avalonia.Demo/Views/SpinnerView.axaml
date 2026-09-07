@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:vm="using:RoyalApps.Community.Avalonia.Demo.ViewModels" xmlns:common="using:RoyalApps.Community.Avalonia.Common.Controls"
+ xmlns:views="using:RoyalApps.Community.Avalonia.Demo.Views"
+ x:Class="RoyalApps.Community.Avalonia.Demo.Views.SpinnerView" x:DataType="vm:SpinnerViewModel">
+<StackPanel Spacing="20">
+ <Border Classes="card" Height="170">
+  <common:CompositionRingSpinner HorizontalAlignment="Center" VerticalAlignment="Center"
+   Width="{Binding Size}" Height="{Binding Size}" IsActive="{Binding IsActive}"
+   StrokeThickness="{Binding StrokeThickness}" ForegroundColor="{Binding ForegroundColor}" TrackColor="{Binding TrackColor}" />
+ </Border>
+ <views:UiThreadDemoView DataContext="{Binding ThreadDemo}" />
+ <Expander Header="Properties" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+ <Grid ColumnDefinitions="*,24,*">
+  <StackPanel Spacing="12"><CheckBox Content="Active" IsChecked="{Binding IsActive, Mode=TwoWay}" /><StackPanel Spacing="6"><TextBlock Text="Foreground color" /><ComboBox ItemsSource="{Binding ColorPresets}" SelectedItem="{Binding ColorPreset, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="Foreground color" /></StackPanel><StackPanel Spacing="6"><TextBlock Text="Track color (18% opacity)" /><ComboBox ItemsSource="{Binding ColorPresets}" SelectedItem="{Binding TrackPreset, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="Track color (18% opacity)" /></StackPanel></StackPanel>
+  <StackPanel Grid.Column="2" Spacing="12"><StackPanel><TextBlock Text="Size (pixels)" /><Slider Minimum="16" Maximum="128" Value="{Binding Size, Mode=TwoWay}" AutomationProperties.Name="Size (pixels)" /><TextBlock Text="{Binding Size, StringFormat='{}{0:0.##}'}" Opacity="0.6" /></StackPanel><StackPanel><TextBlock Text="Stroke thickness" /><Slider Minimum="0.5" Maximum="8" Value="{Binding StrokeThickness, Mode=TwoWay}" AutomationProperties.Name="Stroke thickness" /><TextBlock Text="{Binding StrokeThickness, StringFormat='{}{0:0.##}'}" Opacity="0.6" /></StackPanel></StackPanel>
+ </Grid>
+ </Expander>
+</StackPanel></UserControl>

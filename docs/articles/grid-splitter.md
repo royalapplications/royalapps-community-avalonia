@@ -1,5 +1,15 @@
 # GridSplitter behavior
 
+<DemoMedia name="grid-splitter" alt="The GridSplitter sample with column and row dividers" />
+
+::: details Watch the resize and reset demonstration
+
+<DemoMedia name="grid-splitter" alt="This recording shows dragging both dividers and using Reset sample to restore the initial 2:1 proportions. Double-tap equalization is described below." animated />
+
+This recording shows dragging both dividers and using **Reset sample** to restore the initial 2:1 proportions. Double-tap equalization is described below.
+
+:::
+
 Add the behavior namespace to your XAML and opt in on an individual `GridSplitter`:
 
 ```xml

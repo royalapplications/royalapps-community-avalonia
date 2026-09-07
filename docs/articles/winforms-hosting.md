@@ -2,9 +2,17 @@
 
 `WinFormsControlHost<T>` keeps a Windows Forms control alive when its Avalonia view is temporarily detached. This lets controls retain their state across tab changes. The owning view model explicitly disposes the control when it is permanently closed.
 
-The InteropDemo gives each tab a control with a text box, an instance identifier, and a background color. Switching tabs preserves those values.
+The WinFormsControlHost page in the component demo gives each tab a control with a text box, an instance identifier, and a background color. Switching tabs preserves those values.
 
-![WinForms controls retaining their state across tab changes](../assets/InteropDemo.gif)
+<DemoMedia name="winforms-hosting" alt="The Windows Forms hosting sample with independent native tabs" />
+
+::: details Watch state survive tab changes
+
+<DemoMedia name="winforms-hosting" alt="Switching to Sample 2 and back preserves the text, background color, and instance identifier of Sample 1." animated />
+
+Switching to Sample 2 and back preserves the text, background color, and instance identifier of Sample 1.
+
+:::
 
 ## Installation
 
@@ -23,9 +31,9 @@ Declare the native-control namespace and the type of Windows Forms control to ho
 ```xml
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:winForms="clr-namespace:InteropDemo.WinForms;assembly=InteropDemo.WinForms"
+             xmlns:winForms="clr-namespace:RoyalApps.Community.Avalonia.Demo.WinForms;assembly=RoyalApps.Community.Avalonia.Demo.WinForms"
              xmlns:nativeControls="clr-namespace:RoyalApps.Community.Avalonia.Windows.NativeControls;assembly=RoyalApps.Community.Avalonia.Windows"
-             x:Class="InteropDemo.Views.TestView">
+             x:Class="RoyalApps.Community.Avalonia.Demo.Views.TestView">
     <nativeControls:WinFormsControlHost x:TypeArguments="winForms:TestControl" />
 </UserControl>
 ```
@@ -84,4 +92,4 @@ The owner is used as a dictionary key. Keep its equality and hash-code behavior 
 
 - [WinFormsControlHost API](../api/reference/royalapps-community-avalonia-windows-nativecontrols-winformscontrolhost-1)
 - [Disposal contract](../api/reference/royalapps-community-avalonia-windows-nativecontrols-idisposewinformscontrol)
-- [Complete InteropDemo source](https://github.com/royalapplications/royalapps-community-avalonia/tree/main/src/RoyalApps.Community.Avalonia.InteropDemo)
+- [Complete demo source](https://github.com/royalapplications/royalapps-community-avalonia/tree/main/src/RoyalApps.Community.Avalonia.Demo)

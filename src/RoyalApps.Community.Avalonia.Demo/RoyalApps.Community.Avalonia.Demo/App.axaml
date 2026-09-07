@@ -1,0 +1,10 @@
+<Application xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="RoyalApps.Community.Avalonia.Demo.App">
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://RoyalApps.Community.Avalonia.Common/Controls/AmbientGlowDecorator.Styles.axaml" />
+    <StyleInclude Source="avares://RoyalApps.Community.Avalonia.Common/Controls/CompositionRingSpinner.Styles.axaml" />
+    <Style Selector="TextBlock.section"><Setter Property="FontSize" Value="18" /><Setter Property="FontWeight" Value="SemiBold" /></Style>
+    <Style Selector="Border.card"><Setter Property="Padding" Value="24" /><Setter Property="CornerRadius" Value="12" /><Setter Property="BorderThickness" Value="1" /><Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseLowBrush}" /></Style>
+    <Style Selector="Window[ActualTransparencyLevel=Mica]"><Setter Property="Background" Value="Transparent" /></Style>
+  </Application.Styles>
+</Application>

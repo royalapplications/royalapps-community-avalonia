@@ -32,6 +32,12 @@ features:
     link: /articles/winforms-hosting
 ---
 
+## Explore the component browser
+
+<DemoMedia name="sample-browser" alt="The sample browser with sidebar navigation and an interactive ring spinner preview" />
+
+See the [ambient glow](./articles/ambient-glow), [ring spinner](./articles/ring-spinner), [GridSplitter](./articles/grid-splitter), and [WinForms hosting](./articles/winforms-hosting) pages for screenshots, animations, and usage examples.
+
 ## Two libraries, focused responsibilities
 
 | Library | Purpose | Platform |

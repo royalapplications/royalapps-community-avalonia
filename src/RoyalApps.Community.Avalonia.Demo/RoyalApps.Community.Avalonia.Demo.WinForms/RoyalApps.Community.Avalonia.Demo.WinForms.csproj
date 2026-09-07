@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <UseWindowsForms>true</UseWindowsForms>
+        <Nullable>enable</Nullable>
+        <RootNamespace>RoyalApps.Community.Avalonia.Demo.WinForms</RootNamespace>
+    </PropertyGroup>
+</Project>

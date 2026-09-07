@@ -1,0 +1,5 @@
+<Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:local="using:RoyalApps.Community.Avalonia.Demo" xmlns:vm="using:RoyalApps.Community.Avalonia.Demo.ViewModels"
+ x:Class="RoyalApps.Community.Avalonia.Demo.MainWindow" x:DataType="vm:MainViewModel"
+ Title="Royal Apps · Avalonia components" Width="1180" Height="820" MinWidth="850" MinHeight="600"
+ TransparencyLevelHint="{Binding Transparency}"><local:MainView /></Window>

@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:vm="using:RoyalApps.Community.Avalonia.Demo.ViewModels" xmlns:views="using:RoyalApps.Community.Avalonia.Demo.Views"
+ x:Class="RoyalApps.Community.Avalonia.Demo.MainView" x:DataType="vm:MainViewModel">
+ <Grid ColumnDefinitions="260,*">
+  <Border BorderThickness="0,0,1,0" BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" Padding="20">
+   <DockPanel LastChildFill="True">
+    <StackPanel DockPanel.Dock="Top" Spacing="8" Margin="0,0,0,24">
+     <TextBlock Text="ROYAL APPS" FontWeight="Bold" FontSize="14" />
+     <TextBlock Text="Avalonia components" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" />
+     <TextBlock Text="Explore · adjust · build" Opacity="0.65" />
+    </StackPanel>
+    <StackPanel DockPanel.Dock="Bottom" Spacing="10" Margin="0,20,0,0">
+     <TextBlock Text="Appearance" />
+     <ComboBox ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="Appearance" />
+     <CheckBox Content="Enable Mica" IsVisible="{Binding IsWindows}" IsChecked="{Binding MicaEnabled, Mode=TwoWay}" />
+    </StackPanel>
+    <ListBox ItemsSource="{Binding Samples}" SelectedItem="{Binding SelectedSample, Mode=TwoWay}" Background="Transparent" AutomationProperties.Name="Components">
+     <ListBox.ItemTemplate>
+      <DataTemplate x:DataType="vm:SampleViewModel">
+       <StackPanel Spacing="5" Margin="0,8">
+        <TextBlock Text="{Binding Category}" IsVisible="{Binding StartsCategory}" FontSize="11" Opacity="0.6" />
+        <TextBlock Text="{Binding Title}" FontSize="13" FontWeight="SemiBold" />
+       </StackPanel>
+      </DataTemplate>
+     </ListBox.ItemTemplate>
+    </ListBox>
+   </DockPanel>
+  </Border>
+  <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Disabled">
+   <StackPanel Margin="32" Spacing="24" MaxWidth="1080">
+    <StackPanel Spacing="10">
+     <TextBlock Text="{Binding SelectedSample.Category}" Opacity="0.6" />
+     <TextBlock Text="{Binding SelectedSample.Title}" FontSize="30" FontWeight="SemiBold" TextWrapping="Wrap" />
+     <TextBlock Text="{Binding SelectedSample.Description}" TextWrapping="Wrap" FontSize="15" />
+    </StackPanel>
+    <ContentControl Content="{Binding SelectedSample}" HorizontalContentAlignment="Stretch">
+     <ContentControl.ContentTemplate><views:SampleViewLocator /></ContentControl.ContentTemplate>
+    </ContentControl>
+    <Button Content="Reset sample" Command="{Binding SelectedSample.ResetCommand}" />
+    <StackPanel Spacing="12">
+     <TextBlock Text="Usage · default example" Classes="section" />
+     <Border Classes="card">
+      <SelectableTextBlock Text="{Binding SelectedSample.Code}" FontFamily="monospace" FontSize="12" TextWrapping="Wrap" />
+     </Border>
+    </StackPanel>
+   </StackPanel>
+  </ScrollViewer>
+ </Grid>
+</UserControl>

@@ -2,6 +2,24 @@
 
 `AmbientGlowDecorator` decorates content with a contained accent bloom and a traveling border highlight. It requires only Avalonia.
 
+<DemoMedia name="ambient-glow" alt="The ambient glow sample with live color, motion, and intensity controls" />
+
+::: details Watch the glow animation
+
+<DemoMedia name="ambient-glow" alt="Card, button, and pill-shaped badge animations continue while the UI thread is blocked; the standard Avalonia progress bar pauses." animated />
+
+Card, button, and pill-shaped badge animations continue while the UI thread is blocked; the standard Avalonia progress bar pauses. The dark recording has a reduced capture rate during the blocked interval; use the live sample to inspect continuous motion.
+
+:::
+
+## Try the sample
+
+The gallery includes a content card, a glow-backed button, and a pill-shaped badge. All three share the color and motion controls under **Properties**.
+
+Choose **Block UI thread for 5 seconds** to compare them with a standard indeterminate Avalonia `ProgressBar`. After a short preparation delay, the sample intentionally blocks the dispatcher. The progress bar and input pause, while the compositor-driven glow continues. The UI recovers automatically after five seconds. This deliberate blocking is demonstration code, not an application pattern.
+
+## Standalone setup
+
 Include the theme in your application's styles:
 
 ```xml
