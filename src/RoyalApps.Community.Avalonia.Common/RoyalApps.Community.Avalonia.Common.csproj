@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Product>RoyalApps.Community.Avalonia.Common</Product>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>RoyalApps_1024.png</PackageIcon>
     <RepositoryUrl>https://github.com/royalapplications/royalapps-community-avalonia</RepositoryUrl>
     <PackageTags>Avalonia;Controls;Spinner;Behaviors</PackageTags>
     <Description>Provides common controls and behaviors for Avalonia applications.</Description>
@@ -21,6 +22,7 @@
 
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../docs/public/assets/RoyalApps_1024.png" Pack="true" PackagePath="/" />
     <PackageReference Include="Avalonia" />
     <InternalsVisibleTo Include="RoyalApps.Community.Avalonia.Common.Tests" />
   </ItemGroup>
