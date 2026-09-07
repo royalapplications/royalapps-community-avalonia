@@ -57,12 +57,15 @@ The generator builds both projects and renders all pages before replacing output
 ## Package validation and release
 
 The package workflow builds and tests Common, builds Windows, and uploads both
-Release packages. Pushes and pull requests never publish packages. Maintainers
-review the artifacts and publish them in a separate release step.
+Release packages. Successful pushes to `main` automatically publish both packages
+to NuGet.org using the repository's `NUGET_API_KEY` secret. Existing versions are
+skipped with `--skip-duplicate`, so a new shared version publishes both packages.
+Pull requests only build, test, and upload artifacts. Manual runs on `main` can
+retry publication.
 
 Common and Windows share version `1.3.0`, defined once in `src/Directory.Build.props`.
 Bump that shared version for each release and build both packages together, even
-when only one library changes. Publication remains a separate maintainer action.
+when only one library changes. Never reuse a published version for different contents.
 Produce a local feed with:
 
 ```sh
@@ -78,8 +81,8 @@ package cache to avoid testing a previous archive with the same version.
 
 ## GitHub Pages publishing
 
-The site base is `/royalapps-community-avalonia/`. The documentation workflow validates pull requests and pushes to main, and uploads the built site as an artifact. It does not publish automatically.
+The site base is `/royalapps-community-avalonia/`. The documentation workflow validates pull requests and relevant pushes to `main`, and uploads the built site as an artifact. Successful runs on `main` automatically deploy to GitHub Pages; pull requests never deploy.
 
-To publish, enable GitHub Pages with **GitHub Actions** as the source, then run the documentation workflow manually with **Publish to GitHub Pages** enabled from the `main` branch. Deployment uses the `github-pages` environment and its configured approval rules.
+GitHub Pages must use **GitHub Actions** as its source. A manual documentation workflow run on `main` also deploys the site. Deployment uses the `github-pages` environment and its configured approval rules.
 
 The expected site URL is `https://royalapplications.github.io/royalapps-community-avalonia/`. Building this repository locally does not enable Pages or publish the site.

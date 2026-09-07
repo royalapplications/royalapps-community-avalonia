@@ -67,4 +67,7 @@ jobs:
         name: Avalonia-nupkg
         path: ./*.nupkg
 
-    # Publication is a separate maintainer action after reviewing the release artifacts.
+    # Publish new versions on main; reruns and unchanged versions are skipped.
+    - name: Publish packages to NuGet.org
+      if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+      run: dotnet nuget push "*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate

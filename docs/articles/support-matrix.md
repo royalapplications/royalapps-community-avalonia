@@ -21,6 +21,6 @@ Ambient glow uses a composition visual when available. Without composition, it r
 
 ## Source and package versions
 
-Common and Windows share release version `1.3.0`, defined in `src/Directory.Build.props`. Local release artifacts are for validation; publication is a separate maintainer action. The spinner uses public Avalonia drawing APIs and introduces no direct Skia or Reactive dependency to Common.
+Common and Windows share release version `1.3.0`, defined in `src/Directory.Build.props`. Successful package workflow runs on `main` publish new versions of both packages to NuGet.org; already published versions are skipped. The spinner uses public Avalonia drawing APIs and introduces no direct Skia or Reactive dependency to Common.
 
 Align Avalonia dependencies across consuming projects. A library compiled against a newer Avalonia assembly cannot necessarily be consumed by an application referencing an older version. Verify package metadata before upgrading an existing application.
