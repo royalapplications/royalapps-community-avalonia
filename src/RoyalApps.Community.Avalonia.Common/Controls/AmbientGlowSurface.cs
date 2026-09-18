@@ -18,12 +18,16 @@ internal sealed class AmbientGlowSurface : Control
     private AmbientGlowVisualState? _lastState;
     private AmbientGlowDrawing? _fallbackDrawing;
     private bool _attached;
+    private readonly AmbientGlowGradientObserver _highlightStops;
+    private readonly AmbientGlowGradientObserver _glowStops;
     internal bool IsAnimationRunning => _customVisual is not null && _lastState is { IsAnimating: true };
     internal int VisibilitySubscriptionCount => _subscriptions.Count;
     internal AmbientGlowVisualState? VisualState => _lastState;
 
     public AmbientGlowSurface()
     {
+        _highlightStops = new AmbientGlowGradientObserver(Update);
+        _glowStops = new AmbientGlowGradientObserver(Update);
         IsHitTestVisible = false;
         Focusable = false;
     }
@@ -37,6 +41,8 @@ internal sealed class AmbientGlowSurface : Control
     internal void Disconnect()
     {
         DetachVisual();
+        _highlightStops.Dispose();
+        _glowStops.Dispose();
         _owner = null;
     }
 
@@ -52,6 +58,8 @@ internal sealed class AmbientGlowSurface : Control
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         _attached = false;
+        _highlightStops.Dispose();
+        _glowStops.Dispose();
         DetachVisual();
         foreach (var subscription in _subscriptions) subscription.Dispose();
         _subscriptions.Clear();
@@ -85,12 +93,20 @@ internal sealed class AmbientGlowSurface : Control
             _lastState = null;
             _fallbackDrawing = null;
         }
+        // Observe only while attached, so shared resource collections cannot retain detached controls.
+        if (_attached)
+        {
+            _highlightStops.SetSource(owner.HighlightGradientStops);
+            _glowStops.SetSource(owner.GlowGradientStops);
+        }
         var size = Bounds.Size;
         var active = _attached && IsEffectivelyVisible && owner.IsEffectivelyEnabled && owner.IsAnimationEnabled
             && owner.IsMotionAllowed && size.Width > 0 && size.Height > 0;
         var state = new AmbientGlowVisualState(size, owner.CornerRadius, owner.EffectiveAmbientColor,
             owner.IsDarkTheme, owner.HighlightThickness, owner.GlowOpacity,
-            owner.CycleDuration, active);
+            owner.CycleDuration, active, owner.InvertBorderGradient, owner.HighlightOpacity,
+            _attached ? _highlightStops.Snapshot : AmbientGlowGradientObserver.CreateSnapshot(owner.HighlightGradientStops),
+            _attached ? _glowStops.Snapshot : AmbientGlowGradientObserver.CreateSnapshot(owner.GlowGradientStops));
         if (_lastState == state) return;
         _lastState = state;
         if (_customVisual is not null)

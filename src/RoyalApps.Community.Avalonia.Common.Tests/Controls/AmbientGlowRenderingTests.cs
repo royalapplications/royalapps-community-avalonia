@@ -168,11 +168,71 @@ public sealed class AmbientGlowRenderingTests
         finally { window.Close(); }
 
         var report = new List<string>();
-        foreach (var count in new[] { 1, 20 }) Profile(count, report);
+        foreach (var count in new[] { 1, 20 })
+        {
+            Profile(count, report);
+            Profile(count, report, custom: true);
+        }
         File.WriteAllLines(Path.Combine(directory, "profile.txt"), report);
     }
 
-    private static void Profile(int count, List<string> report)
+    [AvaloniaFact]
+    public void RenderBorderGradientGallery()
+    {
+        var directory = Path.Combine(AppContext.BaseDirectory, "ambient-glow-verification");
+        Directory.CreateDirectory(directory);
+        var panel = new StackPanel { Margin = new Thickness(20), Spacing = 20 };
+        for (var mode = 0; mode < 3; mode++)
+        {
+            var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 24 };
+            foreach (var size in new[] { new Size(240, 36), new Size(160, 72), new Size(64, 64) })
+            {
+                var glow = new AmbientGlowDecorator
+                {
+                    Width = size.Width, Height = size.Height,
+                    CornerRadius = new CornerRadius(size.Width == 240 ? 18 : 12),
+                    InvertBorderGradient = mode == 1, IsAnimationEnabled = false
+                };
+                if (mode == 2)
+                {
+                    glow.HighlightGradientStops = new GradientStops
+                    {
+                        new(Colors.Transparent, 0), new(Colors.Cyan, 0.4), new(Colors.Magenta, 0.5),
+                        new(Colors.Transparent, 0.6), new(Colors.Transparent, 1)
+                    };
+                    glow.GlowGradientStops = new GradientStops
+                    {
+                        new(Colors.Transparent, 0), new(Colors.MediumPurple, 0.5), new(Colors.Transparent, 1)
+                    };
+                }
+                row.Children.Add(glow);
+            }
+            panel.Children.Add(row);
+        }
+        var window = AmbientGlowDecoratorTests.Show(panel, 560, 296);
+        try
+        {
+            var probe = new GlowRenderProbe(window);
+            foreach (var dark in new[] { false, true })
+            {
+                window.RequestedThemeVariant = dark ? ThemeVariant.Dark : ThemeVariant.Light;
+                window.Background = new SolidColorBrush(Color.Parse(dark ? "#141C22" : "#F4F6F8"));
+                foreach (var scale in new[] { 1d, 1.5, 2d })
+                {
+                    using var bitmap = new SKBitmap((int)(560 * scale), (int)(296 * scale));
+                    using var canvas = new SKCanvas(bitmap);
+                    probe.RenderTo(canvas, scale);
+                    using var image = SKImage.FromBitmap(bitmap);
+                    using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+                    using var stream = File.Create(Path.Combine(directory, $"borders-{(dark ? "dark" : "light")}-{scale:0.0}.png"));
+                    data.SaveTo(stream);
+                }
+            }
+        }
+        finally { window.Close(); }
+    }
+
+    private static void Profile(int count, List<string> report, bool custom = false)
     {
         var panel = new StackPanel { Spacing = 4 };
         var decorations = new List<AmbientGlowDecorator>();
@@ -184,6 +244,14 @@ public sealed class AmbientGlowRenderingTests
                 Width = 240, Height = 48, CornerRadius = new CornerRadius(10),
                 AmbientColor = Colors.DodgerBlue, IsAnimationEnabled = false
             };
+            if (custom)
+            {
+                decoration.HighlightGradientStops = new GradientStops
+                {
+                    new(Colors.Transparent, 0), new(Colors.Cyan, 0.5), new(Colors.Transparent, 1)
+                };
+                decoration.GlowGradientStops = decoration.HighlightGradientStops;
+            }
             decorations.Add(decoration);
             panel.Children.Add(decoration);
         }
@@ -211,13 +279,13 @@ public sealed class AmbientGlowRenderingTests
             }
             var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
             stopwatch.Stop();
-            report.Add($"{count} visible: deterministic angle update + real Skia DrawingContextHelper.RenderAsync, " +
+            report.Add($"{count} {(custom ? "custom" : "generated")} visible: deterministic angle update + real Skia DrawingContextHelper.RenderAsync, " +
                 $"{stopwatch.Elapsed.TotalMilliseconds / 120:F3} ms/frame, {allocated / 120} managed bytes/frame (120 frames, warmed up; includes Avalonia rendering).");
             foreach (var decoration in decorations) decoration.IsAnimationEnabled = true;
             foreach (var surface in surfaces) Assert.True(surface.IsAnimationRunning);
             panel.IsVisible = false;
             foreach (var surface in surfaces) Assert.False(surface.IsAnimationRunning);
-            report.Add($"{count} hidden: all frame controllers stopped.");
+            report.Add($"{count} {(custom ? "custom" : "generated")} hidden: all frame controllers stopped.");
         }
         finally { window.Close(); }
     }

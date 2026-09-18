@@ -15,8 +15,10 @@ namespace RoyalApps.Community.Avalonia.Common.Tests.Controls;
 
 public sealed class AmbientGlowCompositionTests
 {
-    [AvaloniaFact]
-    public void CompositorClockAdvancesWhileUiThreadWaitsAndStopsAfterStopMessage()
+    [AvaloniaTheory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void CompositorClockAdvancesWhileUiThreadWaitsAndStopsAfterStopMessage(bool custom)
     {
         var host = new Border { Width = 240, Height = 48 };
         var window = AmbientGlowDecoratorTests.Show(host);
@@ -27,6 +29,14 @@ public sealed class AmbientGlowCompositionTests
         ElementComposition.SetElementChildVisual(host, visual);
         var state = new AmbientGlowVisualState(new Size(240, 48), new CornerRadius(8), Colors.Green,
             false, 0.5, 1, TimeSpan.FromSeconds(9), true);
+        if (custom)
+        {
+            var stops = AmbientGlowGradientObserver.CreateSnapshot(new GradientStops
+            {
+                new(Colors.Transparent, 0), new(Colors.Cyan, 0.5), new(Colors.Transparent, 1)
+            });
+            state = state with { HighlightGradientStops = stops, GlowGradientStops = stops, InvertBorderGradient = true, HighlightOpacity = 0.3 };
+        }
         try
         {
             visual.SendHandlerMessage(state);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -33,8 +34,9 @@ internal sealed class AmbientGlowDrawing
         var transparent = Color.FromArgb(0, accent.R, accent.G, accent.B);
         _bloomStops = [new(0, state.IsDark ? bloomColor : transparent), new(1, state.IsDark ? transparent : bloomColor)];
         var borderBase = state.IsDark ? Color.FromArgb(0, highlight.R, highlight.G, highlight.B) : accent.ChangeBrightness(-0.35F);
-        _glowStops = CreateSweep(0.2, borderBase, highlight);
-        _lightStops = CreateSweep(0.05, borderBase, highlight);
+        if (state.InvertBorderGradient) (borderBase, highlight) = (highlight, borderBase);
+        _glowStops = ResolveSweep(state.GlowGradientStops, 0.2, borderBase, highlight);
+        _lightStops = ResolveSweep(state.HighlightGradientStops, 0.05, borderBase, highlight);
         var side = Math.Max(0, Math.Min(state.Size.Width, state.Size.Height));
         _thickness = Math.Min(state.HighlightThickness, side);
         var radius = state.CornerRadius;
@@ -58,7 +60,7 @@ internal sealed class AmbientGlowDrawing
             center: center, gradientOrigin: center, radius: 0.85);
         _glowPen = new ImmutablePen(new ImmutableConicGradientBrush(_glowStops,
             opacity: (state.IsDark ? 0.5 : 0.8) * state.GlowOpacity, angle: angle + 180), _thickness * 6);
-        _lightPen = new ImmutablePen(new ImmutableConicGradientBrush(_lightStops, angle: angle + 180), _thickness);
+        _lightPen = new ImmutablePen(new ImmutableConicGradientBrush(_lightStops, opacity: state.HighlightOpacity, angle: angle + 180), _thickness);
     }
 
     internal void Draw(ImmediateDrawingContext context)
@@ -102,6 +104,16 @@ internal sealed class AmbientGlowDrawing
         context.DrawRectangle(_bloom, null, _card);
         context.DrawRectangle(null, _glowPen, _stroke);
         context.DrawRectangle(null, _lightPen, _stroke);
+    }
+
+    private static ImmutableGradientStop[] ResolveSweep(IReadOnlyList<ImmutableGradientStop>? custom, double arc, Color background, Color highlight)
+    {
+        if (custom is null) return CreateSweep(arc, background, highlight);
+        // Copy once per configuration update. Array-backed brushes avoid collection enumerator
+        // allocations in the rendering backend; this handler never mutates the cached arrays.
+        var stops = new ImmutableGradientStop[custom.Count];
+        for (var i = 0; i < stops.Length; i++) stops[i] = custom[i];
+        return stops;
     }
 
     private static ImmutableGradientStop[] CreateSweep(double arc, Color background, Color highlight)

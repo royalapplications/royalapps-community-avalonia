@@ -3,10 +3,32 @@
     xmlns:common="using:RoyalApps.Community.Avalonia.Common.Controls"
     xmlns:views="using:RoyalApps.Community.Avalonia.Demo.Views"
     x:Class="RoyalApps.Community.Avalonia.Demo.Views.GlowView" x:DataType="vm:GlowViewModel">
+    <UserControl.Resources>
+        <GradientStops x:Key="CustomHighlightStops">
+            <GradientStop Offset="0" Color="Transparent" />
+            <GradientStop Offset="0.4" Color="Cyan" />
+            <GradientStop Offset="0.5" Color="Magenta" />
+            <GradientStop Offset="0.6" Color="Transparent" />
+            <GradientStop Offset="1" Color="Transparent" />
+        </GradientStops>
+        <GradientStops x:Key="CustomGlowStops">
+            <GradientStop Offset="0" Color="Transparent" />
+            <GradientStop Offset="0.5" Color="MediumPurple" />
+            <GradientStop Offset="1" Color="Transparent" />
+        </GradientStops>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="common|AmbientGlowDecorator.custom-gradients" x:DataType="common:AmbientGlowDecorator">
+            <Setter Property="HighlightGradientStops" Value="{StaticResource CustomHighlightStops}" />
+            <Setter Property="GlowGradientStops" Value="{StaticResource CustomGlowStops}" />
+        </Style>
+    </UserControl.Styles>
     <StackPanel Spacing="16">
         <common:AmbientGlowDecorator x:Name="CardGlow" MinHeight="135" CornerRadius="16" Padding="28" AmbientColor="{Binding AmbientColor}" AmbientColorLight="{Binding LightColor}" AmbientColorDark="{Binding DarkColor}"
                     IsAnimationEnabled="{Binding AnimationEnabled}" IsMotionAllowed="{Binding MotionAllowed}" CycleDuration="{Binding CycleDuration}"
-                    HighlightThickness="{Binding HighlightThickness}" GlowOpacity="{Binding GlowOpacity}">
+                    HighlightThickness="{Binding HighlightThickness}" GlowOpacity="{Binding GlowOpacity}"
+                    InvertBorderGradient="{Binding InvertBorderGradient}" HighlightOpacity="{Binding HighlightOpacity}"
+                    Classes.custom-gradients="{Binding CustomGradients}">
             <StackPanel Spacing="8" VerticalAlignment="Center">
                 <TextBlock Text="A little atmosphere" FontSize="24" FontWeight="SemiBold" />
                 <TextBlock Text="A card, a button, or a badge - the same compositor-driven glow." TextWrapping="Wrap" />
@@ -18,7 +40,9 @@
                 <Button Padding="0" Background="Transparent" BorderThickness="0" CornerRadius="12" HorizontalAlignment="Left">
                     <common:AmbientGlowDecorator CornerRadius="12" Padding="24,12" AmbientColor="{Binding AmbientColor}" AmbientColorLight="{Binding LightColor}" AmbientColorDark="{Binding DarkColor}"
                     IsAnimationEnabled="{Binding AnimationEnabled}" IsMotionAllowed="{Binding MotionAllowed}" CycleDuration="{Binding CycleDuration}"
-                    HighlightThickness="{Binding HighlightThickness}" GlowOpacity="{Binding GlowOpacity}">
+                    HighlightThickness="{Binding HighlightThickness}" GlowOpacity="{Binding GlowOpacity}"
+                    InvertBorderGradient="{Binding InvertBorderGradient}" HighlightOpacity="{Binding HighlightOpacity}"
+                    Classes.custom-gradients="{Binding CustomGradients}">
                         <TextBlock Text="Connect" FontWeight="SemiBold" />
                     </common:AmbientGlowDecorator>
                 </Button>
@@ -27,7 +51,9 @@
                 <TextBlock Text="Pill badge" FontWeight="SemiBold" />
                 <common:AmbientGlowDecorator CornerRadius="100" Padding="20,12" HorizontalAlignment="Left" AmbientColor="{Binding AmbientColor}" AmbientColorLight="{Binding LightColor}" AmbientColorDark="{Binding DarkColor}"
                     IsAnimationEnabled="{Binding AnimationEnabled}" IsMotionAllowed="{Binding MotionAllowed}" CycleDuration="{Binding CycleDuration}"
-                    HighlightThickness="{Binding HighlightThickness}" GlowOpacity="{Binding GlowOpacity}">
+                    HighlightThickness="{Binding HighlightThickness}" GlowOpacity="{Binding GlowOpacity}"
+                    InvertBorderGradient="{Binding InvertBorderGradient}" HighlightOpacity="{Binding HighlightOpacity}"
+                    Classes.custom-gradients="{Binding CustomGradients}">
                     <TextBlock Text="Online" FontWeight="SemiBold" />
                 </common:AmbientGlowDecorator>
             </StackPanel>
@@ -39,9 +65,13 @@
   <StackPanel Spacing="12"><StackPanel Spacing="6"><TextBlock Text="Ambient color" /><ComboBox ItemsSource="{Binding ColorPresets}" SelectedItem="{Binding ColorPreset, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="Ambient color" /></StackPanel>
    <CheckBox Content="Use theme colors (green / purple)" IsChecked="{Binding ThemeColors, Mode=TwoWay}" />
    <CheckBox Content="Animation enabled" IsChecked="{Binding AnimationEnabled, Mode=TwoWay}" />
+   <CheckBox Content="Invert generated border gradients" IsChecked="{Binding InvertBorderGradient, Mode=TwoWay}" />
+   <CheckBox Content="Use custom border gradients" IsChecked="{Binding CustomGradients, Mode=TwoWay}" />
+   <TextBlock Text="Custom gradients override inversion for both border layers." TextWrapping="Wrap" Opacity="0.6" />
    <CheckBox Content="Motion allowed" IsChecked="{Binding MotionAllowed, Mode=TwoWay}" />
   </StackPanel>
-  <StackPanel Grid.Column="2" Spacing="12"><StackPanel><TextBlock Text="Cycle duration (seconds)" /><Slider Minimum="1" Maximum="30" Value="{Binding CycleSeconds, Mode=TwoWay}" AutomationProperties.Name="Cycle duration (seconds)" /><TextBlock Text="{Binding CycleSeconds, StringFormat='{}{0:0.##}'}" Opacity="0.6" /></StackPanel><StackPanel><TextBlock Text="Highlight thickness" /><Slider Minimum="0.1" Maximum="4" Value="{Binding HighlightThickness, Mode=TwoWay}" AutomationProperties.Name="Highlight thickness" /><TextBlock Text="{Binding HighlightThickness, StringFormat='{}{0:0.##}'}" Opacity="0.6" /></StackPanel><StackPanel><TextBlock Text="Glow opacity" /><Slider Minimum="0" Maximum="1" Value="{Binding GlowOpacity, Mode=TwoWay}" AutomationProperties.Name="Glow opacity" /><TextBlock Text="{Binding GlowOpacity, StringFormat='{}{0:0.##}'}" Opacity="0.6" /></StackPanel></StackPanel>
+  <StackPanel Grid.Column="2" Spacing="12">
+   <StackPanel><TextBlock Text="Highlight opacity" /><Slider Minimum="0" Maximum="1" Value="{Binding HighlightOpacity, Mode=TwoWay}" AutomationProperties.Name="Highlight opacity" /><TextBlock Text="{Binding HighlightOpacity, StringFormat='{}{0:0.##}'}" Opacity="0.6" /></StackPanel><StackPanel><TextBlock Text="Cycle duration (seconds)" /><Slider Minimum="1" Maximum="30" Value="{Binding CycleSeconds, Mode=TwoWay}" AutomationProperties.Name="Cycle duration (seconds)" /><TextBlock Text="{Binding CycleSeconds, StringFormat='{}{0:0.##}'}" Opacity="0.6" /></StackPanel><StackPanel><TextBlock Text="Highlight thickness" /><Slider Minimum="0.1" Maximum="4" Value="{Binding HighlightThickness, Mode=TwoWay}" AutomationProperties.Name="Highlight thickness" /><TextBlock Text="{Binding HighlightThickness, StringFormat='{}{0:0.##}'}" Opacity="0.6" /></StackPanel><StackPanel><TextBlock Text="Glow opacity" /><Slider Minimum="0" Maximum="1" Value="{Binding GlowOpacity, Mode=TwoWay}" AutomationProperties.Name="Glow opacity" /><TextBlock Text="{Binding GlowOpacity, StringFormat='{}{0:0.##}'}" Opacity="0.6" /></StackPanel></StackPanel>
  </Grid>
 
         </Expander>

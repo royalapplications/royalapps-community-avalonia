@@ -15,11 +15,14 @@ public partial class GlowViewModel : SampleViewModel
     [ObservableProperty, NotifyPropertyChangedFor(nameof(CycleDuration))] private double _cycleSeconds = 9;
     [ObservableProperty] private double _highlightThickness = 0.5;
     [ObservableProperty] private double _glowOpacity = 1;
+    [ObservableProperty] private bool _invertBorderGradient;
+    [ObservableProperty] private double _highlightOpacity = 1;
+    [ObservableProperty] private bool _customGradients;
     public Color AmbientColor => ParseColor(ColorPreset);
     public Color? LightColor => ThemeColors ? Colors.SeaGreen : null;
     public Color? DarkColor => ThemeColors ? Colors.MediumPurple : null;
     public TimeSpan CycleDuration => TimeSpan.FromSeconds(CycleSeconds);
-    public override void Reset() { ColorPreset = "DodgerBlue"; ThemeColors = false; AnimationEnabled = MotionAllowed = true; CycleSeconds = 9; HighlightThickness = 0.5; GlowOpacity = 1; }
+    public override void Reset() { ColorPreset = "DodgerBlue"; ThemeColors = false; AnimationEnabled = MotionAllowed = true; CycleSeconds = 9; HighlightThickness = 0.5; GlowOpacity = HighlightOpacity = 1; InvertBorderGradient = CustomGradients = false; }
     public override string Code => """
         <!-- In Application.Styles: -->
         <StyleInclude Source="avares://RoyalApps.Community.Avalonia.Common/Controls/AmbientGlowDecorator.Styles.axaml" />
@@ -40,6 +43,17 @@ public partial class GlowViewModel : SampleViewModel
         <!-- A pill-shaped badge -->
         <common:AmbientGlowDecorator CornerRadius="100" Padding="20,12">
             <TextBlock Text="Online" />
+        </common:AmbientGlowDecorator>
+        <!-- Generated borders can be inverted; custom stops take precedence per layer. -->
+        <common:AmbientGlowDecorator InvertBorderGradient="True" HighlightOpacity="0.5" />
+        <common:AmbientGlowDecorator>
+            <common:AmbientGlowDecorator.HighlightGradientStops>
+                <GradientStops>
+                    <GradientStop Offset="0" Color="Transparent" />
+                    <GradientStop Offset="0.5" Color="Cyan" />
+                    <GradientStop Offset="1" Color="Transparent" />
+                </GradientStops>
+            </common:AmbientGlowDecorator.HighlightGradientStops>
         </common:AmbientGlowDecorator>
         <!-- Optional: AmbientColorLight="SeaGreen" AmbientColorDark="MediumPurple" -->
         """;

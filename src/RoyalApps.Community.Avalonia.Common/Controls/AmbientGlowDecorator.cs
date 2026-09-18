@@ -63,6 +63,33 @@ public sealed class AmbientGlowDecorator : ContentControl
         AvaloniaProperty.Register<AmbientGlowDecorator, double>(nameof(GlowOpacity), 1,
             validate: value => double.IsFinite(value) && value >= 0 && value <= 1);
 
+    /// <summary>Identifies <see cref="InvertBorderGradient"/>.</summary>
+    public static readonly StyledProperty<bool> InvertBorderGradientProperty =
+        AvaloniaProperty.Register<AmbientGlowDecorator, bool>(nameof(InvertBorderGradient));
+    /// <summary>Identifies <see cref="HighlightGradientStops"/>.</summary>
+    public static readonly StyledProperty<GradientStops?> HighlightGradientStopsProperty =
+        AvaloniaProperty.Register<AmbientGlowDecorator, GradientStops?>(nameof(HighlightGradientStops));
+    /// <summary>Identifies <see cref="GlowGradientStops"/>.</summary>
+    public static readonly StyledProperty<GradientStops?> GlowGradientStopsProperty =
+        AvaloniaProperty.Register<AmbientGlowDecorator, GradientStops?>(nameof(GlowGradientStops));
+    /// <summary>Identifies <see cref="HighlightOpacity"/>.</summary>
+    public static readonly StyledProperty<double> HighlightOpacityProperty =
+        AvaloniaProperty.Register<AmbientGlowDecorator, double>(nameof(HighlightOpacity), 1,
+            validate: value => double.IsFinite(value) && value >= 0 && value <= 1);
+
+    /// <summary>Gets or sets whether generated border gradients swap base and highlight colors. Defaults to false.</summary>
+    /// <remarks>Does not alter custom stops, interior bloom, animation direction, or phase.</remarks>
+    public bool InvertBorderGradient { get => GetValue(InvertBorderGradientProperty); set => SetValue(InvertBorderGradientProperty, value); }
+    /// <summary>Gets or sets custom stops for the thin rotating conic highlight. Null or empty uses the generated gradient.</summary>
+    /// <remarks>One stop gives a uniform color. Changes to collections and stops update attached controls. Finite offsets are
+    /// clamped to zero through one and stably sorted; nonfinite offsets are ignored. Custom colors are used without theme adjustment.</remarks>
+    public GradientStops? HighlightGradientStops { get => GetValue(HighlightGradientStopsProperty); set => SetValue(HighlightGradientStopsProperty, value); }
+    /// <summary>Gets or sets custom stops for the broad rotating conic glow. Null or empty uses the generated gradient.</summary>
+    /// <remarks>Uses the same offset and update rules as <see cref="HighlightGradientStops"/>. Does not change the interior bloom.</remarks>
+    public GradientStops? GlowGradientStops { get => GetValue(GlowGradientStopsProperty); set => SetValue(GlowGradientStopsProperty, value); }
+    /// <summary>Gets or sets thin highlight opacity from zero to one. Defaults to one; does not dim the broad glow or interior bloom.</summary>
+    public double HighlightOpacity { get => GetValue(HighlightOpacityProperty); set => SetValue(HighlightOpacityProperty, value); }
+
     /// <summary>Gets or sets the fallback color for both themes. Semantic classes or the default theme supply it unless explicitly set.</summary>
     public Color AmbientColor { get => GetValue(AmbientColorProperty); set => SetValue(AmbientColorProperty, value); }
     /// <summary>Gets or sets the light-theme override. When the dark override is absent, its dark variant blends 25% toward white, preserving alpha.</summary>
@@ -108,6 +135,8 @@ public sealed class AmbientGlowDecorator : ContentControl
         else if (change.Property == IsAnimationEnabledProperty
             || change.Property == CycleDurationProperty || change.Property == HighlightThicknessProperty
             || change.Property == GlowOpacityProperty || change.Property == CornerRadiusProperty
+            || change.Property == InvertBorderGradientProperty || change.Property == HighlightOpacityProperty
+            || change.Property == HighlightGradientStopsProperty || change.Property == GlowGradientStopsProperty
             || change.Property == IsEffectivelyEnabledProperty
             || change.Property == IsMotionAllowedProperty)
             _surface?.Update();
